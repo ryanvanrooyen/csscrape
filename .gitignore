@@ -25,3 +25,11 @@ build/Release
 # Dependency directory
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
 node_modules
+
+# JavaScript files since this is writtin in TypeScript (except the gulpfile)
+*.js
+*.js.map
+!gulpfile.js
+
+# Don't include the TypeScript typing files
+/typings
