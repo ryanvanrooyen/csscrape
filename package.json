@@ -1,12 +1,8 @@
 {
   "name": "scraper",
-  "version": "0.1.0",
   "description": "A lightweight, promise-based web scraper for Node.js.",
-  "author": {
-    "name": "Ryan Van Rooyen",
-    "email": "ryan.vanrooyen@icloud.com",
-    "url": "https://www.linkedin.com/pub/ryan-van-rooyen/b7/799/4b4"
-  },
+  "version": "0.1.0",
+  "author": "Ryan Van Rooyen <ryan.vanrooyen@icloud.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/ryanvanrooyen/scraper"
@@ -24,8 +20,9 @@
     "cheerio",
     "request"
   ],
+  "bin": "./cli.js",
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=4.1.1"
   },
   "dependencies": {
     "cheerio": "^0.19.0",
@@ -43,8 +40,10 @@
   "license": "MIT",
   "main": "main.js",
   "scripts": {
-    "debug": "nodev main.js",
-    "start": "node main.js",
-    "test": "gulp test --silent"
+    "test": "gulp test --silent",
+	"prepublish": "tsd install && gulp ts"
+  },
+  "typescript": {
+    "definition": "webScraper.d.ts"
   }
 }
