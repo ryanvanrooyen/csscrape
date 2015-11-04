@@ -241,44 +241,91 @@ describe("WebScraper", () => {
 			.then(done, done);
 	});
 
-	it("can use pseudo selectors to select values", done => {
+	it("can use pseudo selectors to select values (nth-child(1))", done => {
 		var scraper = createScraper();
 
 		scraper.get(url, {})
-			.select({'titles[]': 'dt'})
+			.select({'titles[]': 'dt:nth-child(1)'})
 			.done().then(values => {
 
 				assert.lengthOf(values, 1);
 				var value = <any>values[0];
-				assert.lengthOf(value.titles, 4);
-
+				assert.lengthOf(value.titles, 1);
 				assert.equal(value.titles[0], 'Entry: Item 1');
-				assert.equal(value.titles[1], 'Entry: Item 2');
-				assert.equal(value.titles[2], 'Entry: Item 3');
-				assert.equal(value.titles[3], 'Entry: Item 4');
-
-				assert.fail(null, null, "Test not implemented yet.");
 			})
 			.then(done, done);
 	});
 
-	it("can use pseudo selectors to filter", done => {
+	it("can use pseudo selectors to select values (nth-child(2*n+1))", done => {
 		var scraper = createScraper();
 
 		scraper.get(url, {})
-			.find('.results')
-			.select({'titles[]': 'dt'})
+			.select({'titles[]': 'dt:nth-child(2*n+1)'})
+			.done().then(values => {
+
+				assert.lengthOf(values, 1);
+				var value = <any>values[0];
+				assert.lengthOf(value.titles, 2);
+				assert.equal(value.titles[0], 'Entry: Item 1');
+				assert.equal(value.titles[1], 'Entry: Item 3');
+			})
+			.then(done, done);
+	});
+
+	it("can use pseudo selectors to select values (nth-child(-n+3))", done => {
+		var scraper = createScraper();
+
+		scraper.get(url, {})
+			.select({'titles[]': 'dt:nth-child(-n+3)'})
 			.done().then(values => {
 
 				assert.lengthOf(values, 1);
 				var value = <any>values[0];
 				assert.lengthOf(value.titles, 3);
+				assert.equal(value.titles[0], 'Entry: Item 1');
+				assert.equal(value.titles[1], 'Entry: Item 2');
+				assert.equal(value.titles[2], 'Entry: Item 3');
+			})
+			.then(done, done);
+	});
 
-				assert.equal(value.titles[0], 'Entry: Item 2');
-				assert.equal(value.titles[1], 'Entry: Item 3');
-				assert.equal(value.titles[2], 'Entry: Item 4');
+	it("can use pseudo selectors to filter (nth-child(2))", done => {
+		var scraper = createScraper();
 
-				assert.fail(null, null, "Test not implemented yet.");
+		scraper.get(url, {})
+			.find('dl:nth-child(2)')
+			.select('dt')
+			.done().then(values => {
+				assert.lengthOf(values, 1);
+				assert.equal(values[0], 'Entry: Item 2');
+			})
+			.then(done, done);
+	});
+
+	it("can use pseudo selectors to filter (nth-child(2*n))", done => {
+		var scraper = createScraper();
+
+		scraper.get(url, {})
+			.find('dl:nth-child(2*n)')
+			.select('dt')
+			.done().then(values => {
+				assert.lengthOf(values, 2);
+				assert.equal(values[0], 'Entry: Item 2');
+				assert.equal(values[1], 'Entry: Item 4');
+			})
+			.then(done, done);
+	});
+
+	it("can use pseudo selectors to filter (nth-child(-n+2))", done => {
+		var scraper = createScraper();
+
+		scraper.get(url, {})
+			.find('.results dl:nth-child(-n+2)')
+			.select('dt')
+			.done().then(values => {
+				assert.lengthOf(values, 2);
+				assert.equal(values[0], 'Entry: Item 2');
+				assert.equal(values[1], 'Entry: Item 3');
 			})
 			.then(done, done);
 	});
@@ -330,6 +377,8 @@ describe("WebScraper", () => {
 			})
 			.then(done, done);
 	}
+
+
 });
 
 

@@ -137,7 +137,13 @@ export class CssParser implements ICssParser {
 	private getSelectedIndexes(length: number, param: string) {
 
 		var arr = Array.apply(null, Array(length));
-        var indexes = arr.map((x, i) => this.executExpression(i, param));
+        var indexes = arr.map((x, i) => this.executExpression(i, param))
+						 .filter(x => x !== -1);
+
+		// If the equation reverses order (-n + 3)
+		// Make sure to shift the indexes by the length
+		if (param.indexOf('-') !== -1)
+			indexes = indexes.map(i => i < length ? i : i - length + 1);
 
 		return indexes.filter((x, i) => {
 			var isOutOfRange = x < 0 || x >= length;

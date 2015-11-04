@@ -201,8 +201,10 @@ export class WebScraper implements IWebScraper {
 		var parsedSelector = this.cssParser.parse(selector);
 		selector = parsedSelector.selector;
 
-		var cheerio = result.$(result.element);
-		var elems = cheerio.find(selector).get();
+		var cheerio = result.$(result.element).find(selector);
+		if (parsedSelector.pseudoFilter)
+			cheerio = parsedSelector.pseudoFilter(cheerio);
+		var elems = cheerio.get();
 
 		var values = elems.map(e => {
 			var value: string = null;

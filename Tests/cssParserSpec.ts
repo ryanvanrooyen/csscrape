@@ -66,18 +66,96 @@ describe("CssParser - can parse", () => {
 		' .a :  nth-child( 2 ) ',
 	];
 
-	run('pseudo :nth-child(n) selectors (n=2)', nthChildSelector, result => {
+	run('pseudo :nth-child(n) selectors (2)', nthChildSelector, result => {
 		assert.equal(result.selector, '.a');
 		assert.equal(result.attrFilter, null);
 
-		var el = getElement(
+		var $ = cheerio.load(
 			'<div class="a" href="/test">Item1</div>' +
 			'<div class="a" href="/test">Item2</div>' +
 			'<div class="a" href="/test">Item3</div>');
+		var el = $.root().children();
 
-		var selectedEl = result.pseudoFilter(el);
-		var selectedValue = selectedEl.text();
-		assert.equal(selectedValue, 'Item2');
+		var selection = result.pseudoFilter(el);
+		var items = selection.get().map(el => $(el).text());
+		assert.equal(items.length, 1);
+		assert.equal(items[0], 'Item2');
+	});
+
+	var nthChildOddSelector = [
+		'.a:nth-child(2*n+1)',
+		'.a : nth-child(2*n+1) ',
+		'.a : nth-child( 2*n+1)',
+		'.a : nth-child( 2*n+1 )',
+		' .a :  nth-child( 2*n+1 ) ',
+	];
+
+	run('pseudo :nth-child(n) selectors (2*n+1)', nthChildOddSelector, result => {
+		assert.equal(result.selector, '.a');
+		assert.equal(result.attrFilter, null);
+
+		var $ = cheerio.load(
+			'<div class="a" href="/test">Item1</div>' +
+			'<div class="a" href="/test">Item2</div>' +
+			'<div class="a" href="/test">Item3</div>');
+		var el = $.root().children();
+
+		var selection = result.pseudoFilter(el);
+		var items = selection.get().map(el => $(el).text());
+		assert.equal(items.length, 2);
+		assert.equal(items[0], 'Item1');
+		assert.equal(items[1], 'Item3');
+	});
+
+	var nthChildFirst2Selector = [
+		'.a:nth-child(-n+2)',
+		'.a : nth-child(-n+2) ',
+		'.a : nth-child( -n+2)',
+		'.a : nth-child( -n+2 )',
+		' .a :  nth-child( -n+2 ) ',
+	];
+
+	run('pseudo :nth-child(n) selectors (-n+2)', nthChildFirst2Selector, result => {
+		assert.equal(result.selector, '.a');
+		assert.equal(result.attrFilter, null);
+
+		var $ = cheerio.load(
+			'<div class="a" href="/test">Item1</div>' +
+			'<div class="a" href="/test">Item2</div>' +
+			'<div class="a" href="/test">Item3</div>');
+		var el = $.root().children();
+
+		var selection = result.pseudoFilter(el);
+		var items = selection.get().map(el => $(el).text());
+		assert.equal(items.length, 2);
+		assert.equal(items[0], 'Item1');
+		assert.equal(items[1], 'Item2');
+	});
+
+	var nthChildFirst5Selector = [
+		'.a:nth-child(-n+5)',
+		'.a : nth-child(-n+5) ',
+		'.a : nth-child( -n+5)',
+		'.a : nth-child( -n+5 )',
+		' .a :  nth-child( -n+5 ) ',
+	];
+
+	run('pseudo :nth-child(n) selectors (-n+5)', nthChildFirst5Selector, result => {
+		assert.equal(result.selector, '.a');
+		assert.equal(result.attrFilter, null);
+
+		var $ = cheerio.load(
+			'<div class="a" href="/test">Item1</div>' +
+			'<div class="a" href="/test">Item2</div>' +
+			'<div class="a" href="/test">Item3</div>');
+		var el = $.root().children();
+
+		var selection = result.pseudoFilter(el);
+		var items = selection.get().map(el => $(el).text());
+		assert.equal(items.length, 3);
+		assert.equal(items[0], 'Item1');
+		assert.equal(items[1], 'Item2');
+		assert.equal(items[2], 'Item3');
 	});
 });
 
