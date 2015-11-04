@@ -65,7 +65,7 @@ export class WebScraper implements IWebScraper {
 				var cheerio = r.$(r.element);
 				var attribute = null;
 
-				if (!parsedSelector.attr)
+				if (!parsedSelector.attrFilter)
 					attribute = cheerio.attr('href');
 				else
 					attribute = parsedSelector.attrFilter(cheerio);
