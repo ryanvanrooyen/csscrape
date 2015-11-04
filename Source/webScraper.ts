@@ -6,9 +6,9 @@ import { IHttpClient, HttpClient } from './httpClient';
 export interface IWebScraper {
 	get(url: string, query?: {}): IWebScraper;
 	find(selector: string): IWebScraper;
-	data(propertySelectors: {}): IWebScraper,
+	select(propertySelectors: {}): IWebScraper,
 	follow(selector: string): IWebScraper;
-	promise<T>(): Promise<T[]>;
+	done<T>(): Promise<T[]>;
 }
 
 export class WebScraper implements IWebScraper {
@@ -28,13 +28,13 @@ export class WebScraper implements IWebScraper {
 		this.currentResults = this.currentResults.then(results => {
 			var parsedSelector = this.parseSelector(selector);
 			selector = parsedSelector.selector;
-			return this.select(results, selector);
+			return this.selectResults(results, selector);
 		});
 
 		return this;
 	}
 
-	data(propertySelectors: {}) {
+	select(propertySelectors: {}) {
 
 		this.currentResults = this.currentResults.then(results => {
 			results.forEach(result => {
@@ -54,7 +54,7 @@ export class WebScraper implements IWebScraper {
 
 			var parsedSelector = this.parseSelector(selector);
 			selector = parsedSelector.selector;
-			var newResults = this.select(results, selector);
+			var newResults = this.selectResults(results, selector);
 
 			var loads = newResults.map(r => {
 				var cheerio = r.$(r.element);
@@ -74,7 +74,7 @@ export class WebScraper implements IWebScraper {
 		return this;
 	}
 
-	promise<T>() {
+	done<T>() {
 		return this.currentResults.then(results => {
 			var allData = results.map(r => this.getData(r)).filter(d => d);
 			var data = [];
@@ -86,7 +86,7 @@ export class WebScraper implements IWebScraper {
 		});
 	}
 
-	private select(results: IScraperResult[], selector: string) {
+	private selectResults(results: IScraperResult[], selector: string) {
 
 		var childResults = results.map(result => {
 			var cheerio = result.$(result.element);

@@ -11,8 +11,8 @@ describe("WebScraper", () => {
 		var scraper = createScraper();
 
 		scraper.get(url, {})
-			.data({'title': 'dt'})
-			.promise().then(values => {
+			.select({'title': 'dt'})
+			.done().then(values => {
 
 				assert.lengthOf(values, 1);
 				assert.propertyVal(values[0], 'title', 'Entry: Item 1');
@@ -24,8 +24,8 @@ describe("WebScraper", () => {
 		var scraper = createScraper();
 
 		scraper.get(url, {})
-			.data({'titles[]': 'dt'})
-			.promise().then(values => {
+			.select({'titles[]': 'dt'})
+			.done().then(values => {
 
 				assert.lengthOf(values, 1);
 				var value = <any>values[0];
@@ -44,8 +44,8 @@ describe("WebScraper", () => {
 
 		scraper.get(url, {})
 			.find('.results')
-			.data({'titles[]': 'dt'})
-			.promise().then(values => {
+			.select({'titles[]': 'dt'})
+			.done().then(values => {
 
 				assert.lengthOf(values, 1);
 				var value = <any>values[0];
@@ -63,8 +63,8 @@ describe("WebScraper", () => {
 
 		scraper.get(url, {})
 			.find('.results dl')
-			.data({'title': 'dt'})
-			.promise().then(values => {
+			.select({'title': 'dt'})
+			.done().then(values => {
 
 				assert.lengthOf(values, 3);
 
@@ -80,8 +80,8 @@ describe("WebScraper", () => {
 
 		scraper.get(url, {})
 			.find('.results dl')
-			.data({'info': 'dd span[title]'})
-			.promise().then(values => {
+			.select({'info': 'dd span[title]'})
+			.done().then(values => {
 
 				assert.lengthOf(values, 3);
 				assert.propertyVal(values[0], 'info', 'C2 Title');
@@ -96,8 +96,8 @@ describe("WebScraper", () => {
 
 		scraper.get(url, {})
 			.find('.results dl')
-			.data({'info' : 'dd span[testAttr^="attr"]'})
-			.promise().then(values => {
+			.select({'info' : 'dd span[testAttr^="attr"]'})
+			.done().then(values => {
 
 				assert.lengthOf(values, 3);
 				assert.propertyVal(values[0], 'info', 'attr2');
@@ -112,8 +112,8 @@ describe("WebScraper", () => {
 
 		scraper.get(url, {})
 			.find('.results dl')
-			.data({'info' : 'dd span[testAttr^=attr]'})
-			.promise().then(values => {
+			.select({'info' : 'dd span[testAttr^=attr]'})
+			.done().then(values => {
 
 				assert.lengthOf(values, 3);
 				assert.propertyVal(values[0], 'info', 'attr2');
@@ -128,8 +128,8 @@ describe("WebScraper", () => {
 
 		scraper.get(url, {})
 			.find('.results dl')
-			.data({'info': 'dd span[testAttr="attr3"]'})
-			.promise().then(values => {
+			.select({'info': 'dd span[testAttr="attr3"]'})
+			.done().then(values => {
 
 				assert.lengthOf(values, 1);
 				assert.propertyVal(values[0], 'info', 'D3E3');
@@ -142,8 +142,8 @@ describe("WebScraper", () => {
 
 		scraper.get(url, {})
 			.find('.results dl')
-			.data({'info': 'dd span[testAttr=attr3]'})
-			.promise().then(values => {
+			.select({'info': 'dd span[testAttr=attr3]'})
+			.done().then(values => {
 
 				assert.lengthOf(values, 1);
 				assert.propertyVal(values[0], 'info', 'D3E3');
@@ -156,13 +156,13 @@ describe("WebScraper", () => {
 
 		scraper.get(url, {})
 			.find('.results dl')
-			.data({
+			.select({
 				'title': 'a',
 				'prop1': '.a',
 				'prop2': '.a .b',
 				'prop3': '.d span'
 			})
-			.promise().then(values => {
+			.done().then(values => {
 
 				assert.lengthOf(values, 3);
 
@@ -192,7 +192,7 @@ describe("WebScraper", () => {
 
 		scraper.get(url, {})
 			.find('.results dl')
-			.data({
+			.select({
 				'title' : 'dt',
 				'info' : {
 					'prop1': '.a',
@@ -200,7 +200,7 @@ describe("WebScraper", () => {
 					'prop3': '.d span'
 				}
 			})
-			.promise().then(values => {
+			.done().then(values => {
 
 				assert.lengthOf(values, 3);
 
@@ -230,11 +230,11 @@ describe("WebScraper", () => {
 
 		scraper.get(url, {})
 			.find('.results dl')
-			.data({'title': 'dt',})
+			.select({'title': 'dt',})
 			.follow('dt > a')
 			.find('.details > dl')
-			.data({'details[]': {'name': 'dt'}})
-			.promise().then(values => {
+			.select({'details[]': {'name': 'dt'}})
+			.done().then(values => {
 
 				assert.lengthOf(values, 3);
 
