@@ -2,7 +2,7 @@
 import * as cheerio from 'cheerio';
 import * as querystring from 'querystring';
 import { IHttpClient, HttpClient } from './httpClient';
-import { ICssParser, CssParser } from './cssParser';
+import { ICssParser, ISelectorDetails, CssParser } from './cssParser';
 
 export interface IWebScraper {
 	get(url: string, query?: {}): IWebScraper;
@@ -32,8 +32,7 @@ export class WebScraper implements IWebScraper {
 	find(selector: string) {
 		this.currentResults = this.currentResults.then(results => {
 			var parsedSelector = this.cssParser.parse(selector);
-			selector = parsedSelector.selector;
-			return this.selectResults(results, selector);
+			return this.selectResults(results, parsedSelector);
 		});
 
 		return this;
@@ -58,8 +57,7 @@ export class WebScraper implements IWebScraper {
 		this.currentResults = this.currentResults.then(results => {
 
 			var parsedSelector = this.cssParser.parse(selector);
-			selector = parsedSelector.selector;
-			var newResults = this.selectResults(results, selector);
+			var newResults = this.selectResults(results, parsedSelector);
 
 			var loads = newResults.map(r => {
 				var cheerio = r.$(r.element);
@@ -96,11 +94,13 @@ export class WebScraper implements IWebScraper {
 			list.push(data);
 	}
 
-	private selectResults(results: IScraperResult[], selector: string) {
+	private selectResults(results: IScraperResult[], selectorDetails: ISelectorDetails) {
 
 		var childResults = results.map(result => {
 			var cheerio = result.$(result.element);
-			var selection = cheerio.find(selector);
+			var selection = cheerio.find(selectorDetails.selector);
+			if (selectorDetails.pseudoFilter)
+				selection = selectorDetails.pseudoFilter(selection);
 			return selection.get().map(el => {
 				var childResult: IScraperResult = {
 					parentResult: result,
