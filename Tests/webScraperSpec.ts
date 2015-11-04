@@ -7,7 +7,23 @@ var url = 'http://test.io';
 
 describe("WebScraper", () => {
 
-	it("can parse single values", done => {
+	it("can parse single string values", done => {
+		var scraper = createScraper();
+
+		scraper.get(url, {})
+			.select('dt')
+			.done<string>().then(values => {
+
+				assert.lengthOf(values, 4);
+				assert.equal(values[0], 'Entry: Item 1');
+				assert.equal(values[1], 'Entry: Item 2');
+				assert.equal(values[2], 'Entry: Item 3');
+				assert.equal(values[3], 'Entry: Item 4');
+			})
+			.then(done, done);
+	});
+
+	it("can parse single object values", done => {
 		var scraper = createScraper();
 
 		scraper.get(url, {})

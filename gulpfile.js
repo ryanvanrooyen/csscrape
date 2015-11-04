@@ -5,14 +5,26 @@ var ts = require('gulp-typescript');
 var mocha = require('gulp-mocha');
 var plumber = require('gulp-plumber');
 var merge = require('merge2');
+var sourcemaps = require('gulp-sourcemaps');
 
 
 gulp.task('dev', function () {
 	var tsProject = ts.createProject('tsconfig.json');
-	return tsProject.src()
+	var tsResult = gulp.src([
+			'Source/**/*.ts',
+			'Tests/**/*.ts',
+			'typings/**/*.d.ts',
+		], {base: './'})
 		.pipe(plumber())
-        .pipe(ts(tsProject))
-		.pipe(gulp.dest('./'))
+		.pipe(sourcemaps.init())
+        .pipe(ts(tsProject));
+
+	return tsResult.js
+		.pipe(sourcemaps.write('.', {
+			includeContent:false,
+			sourceRoot:'../'
+		}))
+		.pipe(gulp.dest('./'));
 });
 
 
@@ -27,14 +39,14 @@ gulp.task('release', function () {
 
 	var tsResult = gulp.src([
 			'Source/**/*.ts',
-			'typings/**/*.d.ts',
-			'node_modules/typescript/lib/lib.es6.d.ts'])
+			'typings/**/*.d.ts'
+		])
 		.pipe(plumber())
         .pipe(ts(tsProject));
 
 	return merge([
-        tsResult.dts.pipe(gulp.dest('./Bin')),
-        tsResult.js.pipe(gulp.dest('./Bin'))
+        tsResult.js.pipe(gulp.dest('./Bin')),
+        tsResult.dts.pipe(gulp.dest('./Bin'))
     ]);
 });
 
