@@ -1,4 +1,5 @@
 
+import * as urls from 'url';
 import * as cheerio from 'cheerio';
 import * as querystring from 'querystring';
 import { IHttpClient, HttpClient } from './httpClient';
@@ -30,6 +31,7 @@ export class WebScraper implements IWebScraper {
 	}
 
 	find(selector: string) {
+		this.checkIfValidResults();
 		this.currentResults = this.currentResults.then(results => {
 			var parsedSelector = this.cssParser.parse(selector);
 			return this.selectResults(results, parsedSelector);
@@ -39,7 +41,7 @@ export class WebScraper implements IWebScraper {
 	}
 
 	select(propertySelectors: string | {}) {
-
+		this.checkIfValidResults();
 		this.currentResults = this.currentResults.then(results => {
 			results.forEach(result => {
 
@@ -54,6 +56,7 @@ export class WebScraper implements IWebScraper {
 	}
 
 	follow(selector: string) {
+		this.checkIfValidResults();
 		this.currentResults = this.currentResults.then(results => {
 
 			var parsedSelector = this.cssParser.parse(selector);
@@ -78,12 +81,20 @@ export class WebScraper implements IWebScraper {
 	}
 
 	done<T>() {
-		return this.currentResults.then(results => {
+		this.checkIfValidResults();
+		var lastResults = this.currentResults;
+		this.currentResults = null;
+		return lastResults.then(results => {
 			var allData = results.map(r => this.getCurrentData(r)).filter(d => d);
 			var dataList = [];
 			allData.forEach(data => this.addToList(dataList, data));
 			return <T[]>dataList;
 		});
+	}
+
+	private checkIfValidResults() {
+		if (!this.currentResults)
+			throw 'All scrapings must start with a call to .get()';
 	}
 
 	private addToList(list: any[], data: any) {
@@ -106,7 +117,8 @@ export class WebScraper implements IWebScraper {
 					parentResult: result,
 					$: result.$,
 					element: el,
-					data: null
+					data: null,
+					currentUrl: result.currentUrl
 				};
 				return childResult;
 			})
@@ -214,6 +226,18 @@ export class WebScraper implements IWebScraper {
 
 	private getUrl(url: string, query?: {}, previousResult: IScraperResult = null) {
 
+		if (!url || !url.length)
+			return Promise.reject<IScraperResult>('url could not be found');
+
+		var parsedUrl = urls.parse(url);
+		var isRelativeUrl = !parsedUrl.protocol || !parsedUrl.protocol.length;
+		if (isRelativeUrl && !previousResult) {
+			return Promise.reject<IScraperResult>('url must be an absolute url: ' + url);
+		}
+		else if (isRelativeUrl) {
+			url = urls.resolve(previousResult.currentUrl, url);
+		}
+
 		return this.httpClient.get(url, query).then(html => {
 
 			var $ = cheerio.load(html, { normalizeWhitespace: true });
@@ -221,7 +245,8 @@ export class WebScraper implements IWebScraper {
 				parentResult: previousResult,
 				$: $,
 				element: $.root().get(0),
-				data: null
+				data: null,
+				currentUrl: url
 			};
 			return result;
 		});
@@ -237,4 +262,5 @@ interface IScraperResult {
 	$: CheerioStatic;
 	element: CheerioElement;
 	data: any;
+	currentUrl: string;
 }

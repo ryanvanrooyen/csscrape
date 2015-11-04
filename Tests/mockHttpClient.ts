@@ -13,7 +13,7 @@ export class MockHttpClient implements IHttpClient {
 
 	get(url: string) {
 		var result = this.data
-			.filter(d => d.url === url)
+			.filter(d => d.url.toLowerCase() === url.toLowerCase())
 			.map(d => d.value)[0];
 		return Promise.resolve(result);
 	}
