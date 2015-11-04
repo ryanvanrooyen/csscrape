@@ -1,13 +1,38 @@
 
+import * as util from 'util';
+// import * as readline from 'readline';
 import { WebScraper } from './webScraper';
+
+// var rl = readline.createInterface({
+// 	input: process.stdin,
+// 	output: process.stdout
+// });
+
+interface IMovieResult {
+	name: string,
+	seasons: string[]
+}
 
 var scraper = new WebScraper();
 
 scraper.get('http://www.themoviedb.org/search', { query: 'cosmos' })
-	.find('.results .item:nth-child(-n+5)')
-	.select('.info .title')
-	.done<string>().then(results => {
-		results.forEach(result => console.log(result));
-	}, err => {
-		console.log(err);
-	});
+	.find('.results .item:nth-child(-n+3)')
+	.select({
+		name: '.title'
+	})
+	.follow('.info a.title')
+	.select({
+		'seasons[]': '.season_list li .info h4'
+	})
+	.done<IMovieResult>()
+		.then(results => {
+			console.log(util.inspect(results, false, null));
+		})
+		.then(null, error => {
+			console.log(error);
+		});
+
+// rl.question("Press enter to quit...", resp => {
+// 	console.log(resp);
+// 	rl.close();
+// });

@@ -5,7 +5,7 @@ import { assert } from 'chai';
 
 var url = 'http://test.io';
 
-describe("WebScraper", () => {
+describe.only("WebScraper", () => {
 
 	it("can parse single string values", done => {
 		var scraper = createScraper();
@@ -176,7 +176,9 @@ describe("WebScraper", () => {
 				'title': 'a',
 				'prop1': '.a',
 				'prop2': '.a .b',
-				'prop3': '.d span'
+				'prop3': '.d span',
+				'prop4': '.doesntExist',
+				'prop5[]': '.doesntExist'
 			})
 			.done().then(values => {
 
@@ -187,18 +189,27 @@ describe("WebScraper", () => {
 				assert.propertyVal(value, 'prop1', 'A2B2C2');
 				assert.propertyVal(value, 'prop2', 'B2C2');
 				assert.propertyVal(value, 'prop3', 'E2');
+				assert.propertyVal(value, 'prop4', null);
+				assert.isArray(value.prop5);
+				assert.equal(value.prop5.length, 0);
 
 				var value = <any>values[1];
 				assert.propertyVal(value, 'title', 'Entry: Item 3');
 				assert.propertyVal(value, 'prop1', 'A3B3C3');
 				assert.propertyVal(value, 'prop2', 'B3C3');
 				assert.propertyVal(value, 'prop3', 'E3');
+				assert.propertyVal(value, 'prop4', null);
+				assert.isArray(value.prop5);
+				assert.equal(value.prop5.length, 0);
 
 				var value = <any>values[2];
 				assert.propertyVal(value, 'title', 'Entry: Item 4');
 				assert.propertyVal(value, 'prop1', 'A4B4C4');
 				assert.propertyVal(value, 'prop2', 'B4C4');
 				assert.propertyVal(value, 'prop3', 'E4');
+				assert.propertyVal(value, 'prop4', null);
+				assert.isArray(value.prop5);
+				assert.equal(value.prop5.length, 0);
 			})
 			.then(done, done);
 	});

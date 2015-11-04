@@ -44,10 +44,7 @@ export class WebScraper implements IWebScraper {
 		this.checkIfValidResults();
 		this.currentResults = this.currentResults.then(results => {
 			results.forEach(result => {
-
-				var info = this.getDataResult(propertySelectors, result);
-				if (info.success && !result.data)
-					result.data = info.data;
+				this.setDataResult(propertySelectors, result);
 			});
 			return results;
 		});
@@ -73,6 +70,9 @@ export class WebScraper implements IWebScraper {
 
 				return this.getUrl(attribute, null, r);
 			});
+
+			if (!loads.length)
+				throw ('could not find data to follow: ' + selector);
 
 			return Promise.all(loads);
 		});
@@ -127,61 +127,51 @@ export class WebScraper implements IWebScraper {
 		return this.flatten(childResults);
 	}
 
-	private getDataResult(selectors: string | {}, result: IScraperResult) {
-
-		var data: any = null;
-		var success = false;
+	private setDataResult(selectors: string | {}, result: IScraperResult) {
 
 		if (typeof selectors === 'string') {
 			var values = this.selectData(selectors, result);
-			if (values && values.length) {
-				data = values;
-				success = true;
-			}
+			result.data = values || [];
 		}
 		else {
-			data = this.getCurrentData(result) || {};
-			success = this.createDataResults(selectors, result, data);
-		}
-
-		return {
-			data: data,
-			success: success
+			var data = this.getCurrentData(result) || {};
+			if (this.createDataResults(selectors, result, data))
+				result.data = data;
 		}
 	}
 
 	private createDataResults(selectors: {}, result: IScraperResult, data: {}) {
 
-		var success = true;
+		var dataHasValues = false;
 		for (var prop in selectors) {
 			var selector = selectors[prop];
-			success = success && this.createDataResult(prop, selector, result, data);
+			var foundValues = this.createDataResult(prop, selector, result, data);
+			dataHasValues = dataHasValues || foundValues;
 		}
-		return success;
+		return dataHasValues;
 	}
 
 	private createDataResult(prop: string, selector: string | {},
 		result: IScraperResult, data: {}) {
 
+		var dataHasValues = false;
 		var dataShouldBeArray = false;
-		var endOfPropName = prop.length > 2 ? prop.substr(prop.length - 2, 2) : '';
-
-		if (endOfPropName === '[]') {
+		if (this.stringEndsWith(prop, '[]')) {
 			dataShouldBeArray = true;
 			prop = prop.substring(0, prop.length - 2);
 		}
 
-		var values = null;
+		var values = [];
 		if (selector instanceof Object) {
 			var childData = {};
-			if (!this.createDataResults(selector, result, childData))
-				return false;
-			values = [childData];
+			if (this.createDataResults(selector, result, childData)) {
+				dataHasValues = true;
+				values = [childData];
+			}
 		}
 		else {
 			values = this.selectData(<string>selector, result);
-			if (!values.length)
-				return false;
+			dataHasValues = values && values.length > 0;
 		}
 
 		if (dataShouldBeArray) {
@@ -193,7 +183,13 @@ export class WebScraper implements IWebScraper {
 			data[prop] = values[0] || null;
 		}
 
-		return true;
+		return dataHasValues;
+	}
+
+	private stringEndsWith(str: string, value: string) {
+		str = (str || '').trim();
+		var index = str.indexOf(value);
+		return index !== -1 && index === str.length - value.length;
 	}
 
 	private selectData(selector: string, result: IScraperResult) {
