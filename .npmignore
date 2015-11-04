@@ -13,25 +13,22 @@ lib-cov
 # Coverage directory used by tools like istanbul
 coverage
 
-# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
-.grunt
-
 # node-waf configuration
 .lock-wscript
 
 # Ignore JavaScript mapping files
 *.js.map
 
-# Ignore all tests
+# Ignore all source test files
+/Source
 /Tests
 
 # Ignore VS Code project settings and build files.
 /.vscode
 gulpfile.js
 
-# Ignore the TypeScript source files and typing dependencies.
+# Ignore the TypeScript build files and typing dependencies.
 tsconfig.json
 tsd.json
-*.ts
 /typings
-!./*.d.ts
+/Bin/cli.d.ts

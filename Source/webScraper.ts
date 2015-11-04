@@ -124,7 +124,7 @@ export class WebScraper implements IWebScraper {
 				var childData = {};
 				if (!this.createDataResult(selector, result, childData))
 					return false;
-				values = [ childData ];
+				values = [childData];
 			}
 			else {
 				var parsedSelector = this.parseSelector(selector);
@@ -207,7 +207,7 @@ export class WebScraper implements IWebScraper {
 				attrValue = attrValue.replace(/["']/g, "");
 				attr = attr.substr(0, attrValueIndex);
 
-				var qualifier = attr.substr(attr.length -1);
+				var qualifier = attr.substr(attr.length - 1);
 				var qualifierIndex = attrFilters.indexOf(qualifier);
 				if (qualifierIndex !== -1) {
 					attrFilter = qualifier;

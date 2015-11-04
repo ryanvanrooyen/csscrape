@@ -1,5 +1,5 @@
 
-import { IHttpClient } from '../httpClient';
+import { IHttpClient } from '../Source/httpClient';
 
 export interface IMockHttpData {
 	url: string;

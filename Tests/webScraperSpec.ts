@@ -1,5 +1,5 @@
 
-import { WebScraper } from '../webScraper';
+import { WebScraper } from '../Source/webScraper';
 import { MockHttpClient } from './mockHttpClient';
 import { assert } from 'chai';
 
