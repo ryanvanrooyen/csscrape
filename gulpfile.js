@@ -1,36 +1,36 @@
 
+/* global process */
 var gulp = require('gulp');
 var ts = require('gulp-typescript');
 var mocha = require('gulp-mocha');
 var plumber = require('gulp-plumber');
 var merge = require('merge2');
-var concat = require('gulp-concat');
-
-
-var createTsBuild = function (options) {
-	var tsProject = ts.createProject('tsconfig.json', options);
-	return gulp.src([
-			'Source/**/*.ts',
-			'typings/**/*.d.ts',
-			'node_modules/typescript/lib/lib.es6.d.ts'])
-		.pipe(plumber())
-        .pipe(ts(tsProject));
-};
 
 
 gulp.task('dev', function () {
-	var tsResult = createTsBuild();
-	return tsResult.js.pipe(gulp.dest('./'))
+	var tsProject = ts.createProject('tsconfig.json');
+	return tsProject.src()
+		.pipe(plumber())
+        .pipe(ts(tsProject))
+		.pipe(gulp.dest('./'))
 });
 
 
 gulp.task('release', function () {
-	var tsResult = createTsBuild({
+
+	var tsProject = ts.createProject('tsconfig.json', {
 		declaration: true,
 		noExternalResolve: false,
 		sourceMap: false,
 		removeComments: true
 	});
+
+	var tsResult = gulp.src([
+			'Source/**/*.ts',
+			'typings/**/*.d.ts',
+			'node_modules/typescript/lib/lib.es6.d.ts'])
+		.pipe(plumber())
+        .pipe(ts(tsProject));
 
 	return merge([
         tsResult.dts.pipe(gulp.dest('./Bin')),
@@ -56,4 +56,4 @@ gulp.task('watch', function () {
 });
 
 
-gulp.task('default', ['dev']);
+gulp.task('default', ['release']);
