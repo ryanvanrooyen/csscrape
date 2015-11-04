@@ -5,7 +5,7 @@ import { assert } from 'chai';
 
 var url = 'http://test.io';
 
-describe.only("WebScraper", () => {
+describe("WebScraper", () => {
 
 	it("can parse single string values", done => {
 		var scraper = createScraper();
@@ -41,10 +41,10 @@ describe.only("WebScraper", () => {
 
 		scraper.get(url, {})
 			.select({'titles[]': 'dt'})
-			.done().then(values => {
+			.done<any>().then(values => {
 
 				assert.lengthOf(values, 1);
-				var value = <any>values[0];
+				var value = values[0];
 				assert.lengthOf(value.titles, 4);
 
 				assert.equal(value.titles[0], 'Entry: Item 1');
@@ -61,10 +61,10 @@ describe.only("WebScraper", () => {
 		scraper.get(url, {})
 			.find('.results')
 			.select({'titles[]': 'dt'})
-			.done().then(values => {
+			.done<any>().then(values => {
 
 				assert.lengthOf(values, 1);
-				var value = <any>values[0];
+				var value = values[0];
 				assert.lengthOf(value.titles, 3);
 
 				assert.equal(value.titles[0], 'Entry: Item 2');
@@ -92,17 +92,26 @@ describe.only("WebScraper", () => {
 	});
 
 	it("can select attributes", done => {
-		var scraper = createScraper();
+		var scraper = createScraper(true);
 
 		scraper.get(url, {})
 			.find('.results dl')
-			.select({'info': 'dd span[title]'})
-			.done().then(values => {
+			.select({
+				info: 'dd span[title]'
+			})
+			.follow('dt a')
+			.select({
+				href: 'a[href]:nth-child(2)'
+			})
+			.done<any>().then(values => {
 
 				assert.lengthOf(values, 3);
-				assert.propertyVal(values[0], 'info', 'C2 Title');
-				assert.propertyVal(values[1], 'info', 'C3 Title');
-				assert.propertyVal(values[2], 'info', 'C4 Title');
+				assert.equal(values[0].info, 'C2 Title');
+				assert.equal(values[0].href, 'http://moreinfo.io/evenmoreinfo');
+				assert.equal(values[1].info, 'C3 Title');
+				assert.equal(values[1].href, 'http://moreinfo.io/evenmoreinfo');
+				assert.equal(values[2].info, 'C4 Title');
+				assert.equal(values[2].href, 'http://moreinfo.io/evenmoreinfo');
 			})
 			.then(done, done);
 	});
@@ -113,7 +122,7 @@ describe.only("WebScraper", () => {
 		scraper.get(url, {})
 			.find('.results dl')
 			.select({'info' : 'dd span[testAttr^="attr"]'})
-			.done().then(values => {
+			.done<any>().then(values => {
 
 				assert.lengthOf(values, 3);
 				assert.propertyVal(values[0], 'info', 'attr2');
@@ -180,11 +189,11 @@ describe.only("WebScraper", () => {
 				'prop4': '.doesntExist',
 				'prop5[]': '.doesntExist'
 			})
-			.done().then(values => {
+			.done<any>().then(values => {
 
 				assert.lengthOf(values, 3);
 
-				var value = <any>values[0];
+				var value = values[0];
 				assert.propertyVal(value, 'title', 'Entry: Item 2');
 				assert.propertyVal(value, 'prop1', 'A2B2C2');
 				assert.propertyVal(value, 'prop2', 'B2C2');
@@ -193,7 +202,7 @@ describe.only("WebScraper", () => {
 				assert.isArray(value.prop5);
 				assert.equal(value.prop5.length, 0);
 
-				var value = <any>values[1];
+				var value = values[1];
 				assert.propertyVal(value, 'title', 'Entry: Item 3');
 				assert.propertyVal(value, 'prop1', 'A3B3C3');
 				assert.propertyVal(value, 'prop2', 'B3C3');
@@ -202,7 +211,7 @@ describe.only("WebScraper", () => {
 				assert.isArray(value.prop5);
 				assert.equal(value.prop5.length, 0);
 
-				var value = <any>values[2];
+				var value = values[2];
 				assert.propertyVal(value, 'title', 'Entry: Item 4');
 				assert.propertyVal(value, 'prop1', 'A4B4C4');
 				assert.propertyVal(value, 'prop2', 'B4C4');
@@ -227,23 +236,23 @@ describe.only("WebScraper", () => {
 					'prop3': '.d span'
 				}
 			})
-			.done().then(values => {
+			.done<any>().then(values => {
 
 				assert.lengthOf(values, 3);
 
-				var value = <any>values[0];
+				var value = values[0];
 				assert.propertyVal(value, 'title', 'Entry: Item 2');
 				assert.propertyVal(value.info, 'prop1', 'A2B2C2');
 				assert.propertyVal(value.info, 'prop2', 'B2C2');
 				assert.propertyVal(value.info, 'prop3', 'E2');
 
-				var value = <any>values[1];
+				var value = values[1];
 				assert.propertyVal(value, 'title', 'Entry: Item 3');
 				assert.propertyVal(value.info, 'prop1', 'A3B3C3');
 				assert.propertyVal(value.info, 'prop2', 'B3C3');
 				assert.propertyVal(value.info, 'prop3', 'E3');
 
-				var value = <any>values[2];
+				var value = values[2];
 				assert.propertyVal(value, 'title', 'Entry: Item 4');
 				assert.propertyVal(value.info, 'prop1', 'A4B4C4');
 				assert.propertyVal(value.info, 'prop2', 'B4C4');
@@ -257,10 +266,10 @@ describe.only("WebScraper", () => {
 
 		scraper.get(url, {})
 			.select({'titles[]': 'dt:nth-child(1)'})
-			.done().then(values => {
+			.done<any>().then(values => {
 
 				assert.lengthOf(values, 1);
-				var value = <any>values[0];
+				var value = values[0];
 				assert.lengthOf(value.titles, 1);
 				assert.equal(value.titles[0], 'Entry: Item 1');
 			})
@@ -272,10 +281,10 @@ describe.only("WebScraper", () => {
 
 		scraper.get(url, {})
 			.select({'titles[]': 'dt:nth-child(2*n+1)'})
-			.done().then(values => {
+			.done<any>().then(values => {
 
 				assert.lengthOf(values, 1);
-				var value = <any>values[0];
+				var value = values[0];
 				assert.lengthOf(value.titles, 2);
 				assert.equal(value.titles[0], 'Entry: Item 1');
 				assert.equal(value.titles[1], 'Entry: Item 3');
@@ -288,10 +297,10 @@ describe.only("WebScraper", () => {
 
 		scraper.get(url, {})
 			.select({'titles[]': 'dt:nth-child(-n+3)'})
-			.done().then(values => {
+			.done<any>().then(values => {
 
 				assert.lengthOf(values, 1);
-				var value = <any>values[0];
+				var value = values[0];
 				assert.lengthOf(value.titles, 3);
 				assert.equal(value.titles[0], 'Entry: Item 1');
 				assert.equal(value.titles[1], 'Entry: Item 2');
@@ -361,25 +370,25 @@ describe.only("WebScraper", () => {
 			.select({'details[]': {'name': 'dt'}})
 			.follow('a')
 			.select({'extraInfo[]': 'div'})
-			.done().then(values => {
+			.done<any>().then(values => {
 
 				assert.lengthOf(values, 3);
 
-				var value = <any>values[0];
+				var value = values[0];
 				assert.propertyVal(value, 'title', 'Entry: Item 2');
 				assert.lengthOf(value.details, 2);
 				assert.propertyVal(value.details[0], 'name', 'Entry Details Info 2');
 				assert.propertyVal(value.details[1], 'name', 'Entry Details Info 3');
 				assert.lengthOf(value.extraInfo, 2);
 
-				var value = <any>values[1];
+				var value = values[1];
 				assert.propertyVal(value, 'title', 'Entry: Item 3');
 				assert.lengthOf(value.details, 2);
 				assert.propertyVal(value.details[0], 'name', 'Entry Details Info 2');
 				assert.propertyVal(value.details[1], 'name', 'Entry Details Info 3');
 				assert.lengthOf(value.extraInfo, 2);
 
-				var value = <any>values[2];
+				var value = values[2];
 				assert.propertyVal(value, 'title', 'Entry: Item 4');
 				assert.lengthOf(value.details, 2);
 				assert.propertyVal(value.details[0], 'name', 'Entry Details Info 2');
@@ -395,10 +404,10 @@ describe.only("WebScraper", () => {
 
 function createScraper(useRelativeLinks = false) {
 
-	var moreInfoHost = 'http://moreInfo.io';
+	var moreInfoHost = 'http://moreinfo.io';
 	var detailsUrl = moreInfoHost + '/details';
-	var furtherDetailsAbsUrl = moreInfoHost + '/evenMoreInfo';
-	var furtherDetailsUrl = useRelativeLinks ? '/evenMoreInfo' : furtherDetailsAbsUrl;
+	var furtherDetailsAbsUrl = moreInfoHost + '/evenmoreinfo';
+	var furtherDetailsUrl = useRelativeLinks ? '/evenmoreinfo' : furtherDetailsAbsUrl;
 
 	var html = `
 		<dl><dt><a href="${detailsUrl}"><b>Entry:</b> Item 1</a></dt>

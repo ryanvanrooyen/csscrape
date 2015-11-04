@@ -18,10 +18,12 @@ var scraper = new WebScraper();
 scraper.get('http://www.themoviedb.org/search', { query: 'cosmos' })
 	.find('.results .item:nth-child(-n+3)')
 	.select({
-		name: '.title'
+		name: '.title',
+		href: '.info a.title[href]'
 	})
 	.follow('.info a.title')
 	.select({
+		poster: '#leftCol .poster img[src]',
 		'seasons[]': '.season_list li .info h4'
 	})
 	.done<IMovieResult>()

@@ -204,10 +204,16 @@ export class WebScraper implements IWebScraper {
 
 		var values = elems.map(e => {
 			var value: string = null;
-			if (parsedSelector.attrFilter)
+			if (parsedSelector.attrFilter) {
 				value = parsedSelector.attrFilter(result.$(e));
-			else
+
+				if (value && parsedSelector.attr === 'href' ||
+					parsedSelector.attr === 'src')
+					value = urls.resolve(result.currentUrl, value);
+			}
+			else {
 				value = result.$(e).text();
+			}
 			return value && value.trim();
 		});
 		values = values.filter(v => v && v.length > 0);
@@ -238,7 +244,7 @@ export class WebScraper implements IWebScraper {
 
 		return this.httpClient.get(url, query).then(html => {
 
-			var $ = cheerio.load(html, { normalizeWhitespace: true });
+			var $ = this.parseHtml(url, html);
 			var result: IScraperResult = {
 				parentResult: previousResult,
 				$: $,
@@ -248,6 +254,17 @@ export class WebScraper implements IWebScraper {
 			};
 			return result;
 		});
+	}
+
+	private parseHtml(url: string, html: string) {
+		if (!html || !html.length)
+				throw 'received no html from url: ' + url;
+		try {
+			return cheerio.load(html, { normalizeWhitespace: true });
+		}
+		catch (exc) {
+			throw `unable to parse html from url ${url}: ${html}`;
+		}
 	}
 
 	private flatten<T>(values: T[][]) {

@@ -8,6 +8,7 @@ export interface ICssParser {
 
 export interface ISelectorDetails {
 	selector: string;
+	attr: string;
 	attrFilter: (el: Cheerio) => string;
 	pseudoFilter: (el: Cheerio) => Cheerio;
 }
@@ -18,6 +19,7 @@ export class CssParser implements ICssParser {
 
 		var details: ISelectorDetails = {
 			selector: selector || '',
+			attr: null,
 			attrFilter: null,
 			pseudoFilter: null
 		};
@@ -56,6 +58,7 @@ export class CssParser implements ICssParser {
 					attr = attr.substr(0, attr.length - 1);
 				}
 			}
+			details.attr = attr.trim().toLowerCase();
 		}
 
 		details.attrFilter = this.getAttrFilter(attr, attrValue, attrFilter);
