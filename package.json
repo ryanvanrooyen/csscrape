@@ -22,7 +22,7 @@
   ],
   "bin": "Bin/cli.js",
   "engines": {
-    "node": ">=4.1.1"
+    "node": ">=4.0.0"
   },
   "dependencies": {
     "cheerio": "^0.19.0",
