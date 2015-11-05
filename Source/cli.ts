@@ -1,9 +1,13 @@
 
-import * as util from 'util';
+import * as cheerio from 'cheerio';
 import * as program from 'commander';
 import { WebScraper } from './webScraper';
+import { ConsoleLogger } from './logging';
 
-var scraper = new WebScraper();
+var x = cheerio.name;
+
+var logger = new ConsoleLogger();
+var scraper = new WebScraper(logger);
 
 function parseSelector(arg) {
 	console.log(arg);
@@ -30,8 +34,8 @@ if (!program.args || !program.args.length) {
 }
 
 
-/*scraper.get('http://www.themoviedb.org/search', { query: 'cosmos' })
-	.find('.results .item:nth-child(-n+3)')
+/*scraper.get('https://www.themoviedb.org/search', { query: 'cosmos' })
+	.find('.results .item:nth-child(-n+2)')
 	.select({
 		name: '.title',
 		href: '.info a.title[href]'
@@ -43,8 +47,8 @@ if (!program.args || !program.args.length) {
 	})
 	.done<any>()
 	.then(results => {
-		console.log(util.inspect(results, false, null));
+		logger.info(results);
 	})
 	.then(null, error => {
-		console.log(error);
+		logger.error(error);
 	});*/

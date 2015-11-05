@@ -1,6 +1,7 @@
 
 import * as cheerio from 'cheerio';
 import * as vm from 'vm';
+import { ILogger, NullLogger } from './logging';
 
 export interface ICssParser {
 	parse(selector: string): ISelectorDetails
@@ -14,6 +15,9 @@ export interface ISelectorDetails {
 }
 
 export class CssParser implements ICssParser {
+
+	constructor(private log: ILogger = new NullLogger()) {
+	}
 
 	public parse(selector: string): ISelectorDetails {
 

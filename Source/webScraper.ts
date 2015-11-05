@@ -2,6 +2,7 @@
 import * as urls from 'url';
 import * as cheerio from 'cheerio';
 import * as querystring from 'querystring';
+import { ILogger, NullLogger } from './logging';
 import { IHttpClient, HttpClient } from './httpClient';
 import { ICssParser, ISelectorDetails, CssParser } from './cssParser';
 
@@ -17,12 +18,9 @@ export class WebScraper implements IWebScraper {
 
 	private currentResults: Promise<IScraperResult[]>;
 
-	constructor(
-		private httpClient: IHttpClient = new HttpClient(),
-		private cssParser: ICssParser = new CssParser()) {
-
-		if (!this.httpClient) throw 'httpClient must be defined';
-		if (!this.cssParser) throw 'cssParser must be defined';
+	constructor(private log: ILogger = new NullLogger(),
+		private httpClient: IHttpClient = new HttpClient(log),
+		private cssParser: ICssParser = new CssParser(log)) {
 	}
 
 	get(url: string, query?: {}) {
@@ -33,6 +31,7 @@ export class WebScraper implements IWebScraper {
 	find(selector: string) {
 		this.checkIfValidResults();
 		this.currentResults = this.currentResults.then(results => {
+			results = results.filter(r => r !== null);
 			var parsedSelector = this.cssParser.parse(selector);
 			return this.selectResults(results, parsedSelector);
 		});
@@ -43,6 +42,7 @@ export class WebScraper implements IWebScraper {
 	select(propertySelectors: string | {}) {
 		this.checkIfValidResults();
 		this.currentResults = this.currentResults.then(results => {
+			results = results.filter(r => r !== null);
 			results.forEach(result => {
 				this.setDataResult(propertySelectors, result);
 			});
@@ -55,6 +55,7 @@ export class WebScraper implements IWebScraper {
 	follow(selector: string) {
 		this.checkIfValidResults();
 		this.currentResults = this.currentResults.then(results => {
+			results = results.filter(r => r !== null);
 
 			var parsedSelector = this.cssParser.parse(selector);
 			var newResults = this.selectResults(results, parsedSelector);
@@ -68,7 +69,8 @@ export class WebScraper implements IWebScraper {
 				else
 					attribute = parsedSelector.attrFilter(cheerio);
 
-				return this.getUrl(attribute, null, r);
+				return this.createAlwaysResolvedPromise(
+					this.getUrl(attribute, null, r));
 			});
 
 			if (!loads.length)
@@ -85,6 +87,7 @@ export class WebScraper implements IWebScraper {
 		var lastResults = this.currentResults;
 		this.currentResults = null;
 		return lastResults.then(results => {
+			results = results.filter(r => r !== null);
 			var allData = results.map(r => this.getCurrentData(r)).filter(d => d);
 			var dataList = [];
 			allData.forEach(data => this.addToList(dataList, data));
@@ -242,15 +245,15 @@ export class WebScraper implements IWebScraper {
 			url = urls.resolve(previousResult.currentUrl, url);
 		}
 
-		return this.httpClient.get(url, query).then(html => {
+		return this.httpClient.get(url, query).then(resp => {
 
-			var $ = this.parseHtml(url, html);
+			var $ = this.parseHtml(url, resp.data);
 			var result: IScraperResult = {
 				parentResult: previousResult,
 				$: $,
 				element: $.root().get(0),
 				data: null,
-				currentUrl: url
+				currentUrl: resp.url
 			};
 			return result;
 		});
@@ -269,6 +272,15 @@ export class WebScraper implements IWebScraper {
 
 	private flatten<T>(values: T[][]) {
 		return values.reduce((x, y) => x.concat(y), []);
+	}
+
+	private createAlwaysResolvedPromise<T>(promise: Promise<T>) {
+		return new Promise<T>((resolve, reject) => {
+			promise
+				.then(value => resolve(value))
+				.then(null, error => this.log.error(error))
+				.then(null, error => resolve(null))
+		});
 	}
 }
 

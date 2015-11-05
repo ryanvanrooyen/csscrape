@@ -1,5 +1,6 @@
 
 import { WebScraper } from '../Source/webScraper';
+import { NullLogger } from '../Source/logging';
 import { MockHttpClient } from './mockHttpClient';
 import { assert } from 'chai';
 
@@ -452,5 +453,5 @@ function createScraper(useRelativeLinks = false) {
 		{ url: furtherDetailsAbsUrl, value: furtherDetailsHtml }
 	]);
 
-	return new WebScraper(httpClient);
+	return new WebScraper(new NullLogger(), httpClient);
 }

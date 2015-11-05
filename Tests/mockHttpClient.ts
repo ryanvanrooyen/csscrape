@@ -15,6 +15,6 @@ export class MockHttpClient implements IHttpClient {
 		var result = this.data
 			.filter(d => d.url.toLowerCase() === url.toLowerCase())
 			.map(d => d.value)[0];
-		return Promise.resolve(result);
+		return Promise.resolve({ url: url, data: result });
 	}
 }
