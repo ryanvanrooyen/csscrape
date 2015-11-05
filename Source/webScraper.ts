@@ -88,7 +88,11 @@ export class WebScraper implements IWebScraper {
 		this.currentResults = null;
 		return lastResults.then(results => {
 			results = results.filter(r => r !== null);
-			var allData = results.map(r => this.getCurrentData(r)).filter(d => d);
+			var allData = results.map(r => {
+				var data = this.getCurrentData(r);
+				if (!data) data = r.$.html();
+				return data;
+			}).filter(d => d);
 			var dataList = [];
 			allData.forEach(data => this.addToList(dataList, data));
 			return <T[]>dataList;

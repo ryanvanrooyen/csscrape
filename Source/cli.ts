@@ -1,31 +1,41 @@
 
-import * as cheerio from 'cheerio';
 import * as program from 'commander';
 import { WebScraper } from './webScraper';
-import { ConsoleLogger } from './logging';
+import { NullLogger, ConsoleLogger } from './logging';
 
-var x = cheerio.name;
+var logger = new NullLogger();
+var selector = null;
 
-var logger = new ConsoleLogger();
-var scraper = new WebScraper(logger);
+function setToVerbose() {
+	logger = new ConsoleLogger();
+	logger.info(`Set to verbose mode.`);
+}
 
-function parseSelector(arg) {
-	console.log(arg);
-	return arg;
+function setSelector(sel) {
+	selector = sel;
 }
 
 function runScraper(url) {
-	console.log(url);
+	logger.info(`Running program...`);
+	var scraper = new WebScraper(logger);
+	scraper.get(url)
+	if (selector)
+		scraper.select(selector);
+	scraper.done<any>()
+		.then(results => {
+			if (results.length && results.length === 1)
+				results = results[0];
+			console.log(results);
+		});
 }
 
 program
 	.version('0.1.0')
-	.usage("cssscrape url -s 'selector'")
+	.usage("cssscrape <url> -s 'selector'")
 	.option('-f, --find <selector>', 'A css selector string')
-	.option('-s, --select <selector>', 'A css selector string or json object', parseSelector)
+	.option('-s, --select <selector>', 'A css selector string or json object', setSelector)
 	.option('-l, --followlink <selector>', 'A css selector string')
-	.option('-v, --verbose', 'Set logging to verbose')
-	.command('<url> [options]')
+	.option('-v, --verbose', 'Set logging to verbose', setToVerbose)
 	.action(runScraper)
 	.parse(process.argv);
 
