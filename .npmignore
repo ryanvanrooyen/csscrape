@@ -19,7 +19,7 @@ coverage
 # Ignore JavaScript mapping files
 *.js.map
 
-# Ignore all source test files
+# Ignore all source and test files
 /Source
 /Tests
 
