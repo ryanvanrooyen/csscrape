@@ -1,7 +1,11 @@
 
+import * as fs from 'fs';
 import * as program from 'commander';
 import { WebScraper } from './webScraper';
 import { NullLogger, ConsoleLogger } from './logging';
+
+var packageFile = fs.readFileSync('package.json', 'utf8');
+var packageInfo = JSON.parse(packageFile);
 
 var logger = new NullLogger();
 var selector = null;
@@ -29,8 +33,9 @@ function runScraper(url) {
 		});
 }
 
+
 program
-	.version('0.1.0')
+	.version(packageInfo.version)
 	.usage("cssscrape <url> -s 'selector'")
 	.option('-f, --find <selector>', 'A css selector string')
 	.option('-s, --select <selector>', 'A css selector string or json object', setSelector)

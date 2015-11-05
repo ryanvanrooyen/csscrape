@@ -1,7 +1,7 @@
 {
   "name": "csscrape",
   "description": "A lightweight, promise-based web scraper.",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "author": "Ryan Van Rooyen <ryan.vanrooyen@icloud.com>",
   "repository": {
     "type": "git",
@@ -44,7 +44,7 @@
   "main": "Bin/webScraper.js",
   "scripts": {
     "test": "gulp test --silent",
-    "prepublish": "tsd update && gulp release"
+    "prepublish": "gulp release"
   },
   "typescript": {
     "definition": "Bin/webScraper.d.ts"
