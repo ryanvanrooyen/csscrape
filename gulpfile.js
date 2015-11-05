@@ -5,6 +5,7 @@ var ts = require('gulp-typescript');
 var mocha = require('gulp-mocha');
 var plumber = require('gulp-plumber');
 var merge = require('merge2');
+var insert = require('gulp-insert');
 var sourcemaps = require('gulp-sourcemaps');
 
 
@@ -28,7 +29,7 @@ gulp.task('dev', function () {
 });
 
 
-gulp.task('release', function () {
+gulp.task('release-build', function () {
 
 	var tsProject = ts.createProject('tsconfig.json', {
 		declaration: true,
@@ -48,6 +49,14 @@ gulp.task('release', function () {
         tsResult.js.pipe(gulp.dest('./Bin')),
         tsResult.dts.pipe(gulp.dest('./Bin'))
     ]);
+});
+
+
+gulp.task('release', ['release-build'], function () {
+
+	return gulp.src('Bin/cli.js')
+		.pipe(insert.prepend('#! /usr/bin/env node \n'))
+		.pipe(gulp.dest('./Bin'));
 });
 
 
