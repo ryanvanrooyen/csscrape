@@ -24,6 +24,10 @@ export class WebScraper implements IWebScraper {
 	}
 
 	get(url: string, query?: {}) {
+
+		if (url && url.indexOf('://') === -1)
+			url = 'http://' + url;
+
 		this.currentResults = this.getUrl(url, query).then(result => [result]);
 		return this;
 	}
@@ -248,6 +252,7 @@ export class WebScraper implements IWebScraper {
 
 		var parsedUrl = urls.parse(url);
 		var isRelativeUrl = !parsedUrl.protocol || !parsedUrl.protocol.length;
+
 		if (isRelativeUrl && !previousResult) {
 			return Promise.reject<IScraperResult>('url must be an absolute url: ' + url);
 		}

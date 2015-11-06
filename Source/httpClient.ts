@@ -1,9 +1,8 @@
 
 import * as urls from 'url';
-import * as http from 'http';
-import * as https from 'https';
 import * as querystring from 'querystring';
 import { ILogger, NullLogger } from './logging';
+import { IHttpTransport, HttpTransport} from './httpTransport';
 
 export interface IHttpClient {
 	get(url: string, query?: {}): Promise<IHttpResponse>;
@@ -16,7 +15,8 @@ export interface IHttpResponse {
 
 export class HttpClient implements IHttpClient {
 
-	constructor(private log: ILogger = new NullLogger()) {
+	constructor(private log: ILogger = new NullLogger(),
+		private transport: IHttpTransport = new HttpTransport()) {
 	}
 
 	get(url: string, query?: {}): Promise<IHttpResponse> {
@@ -25,9 +25,14 @@ export class HttpClient implements IHttpClient {
 			return Promise.reject<IHttpResponse>('No url specified to http get.');
 		if (query)
 			url += '?' + querystring.stringify(query);
+		if (url.indexOf('://') === -1)
+			url = 'http://' + url;
 
 		var parsedUrl = urls.parse(url);
-		if (parsedUrl.protocol !== 'http:' &&
+		if (!parsedUrl.protocol || !parsedUrl.protocol.length) {
+			parsedUrl.protocol = 'http:';
+		}
+		else if (parsedUrl.protocol !== 'http:' &&
 			parsedUrl.protocol !== 'https:') {
 
 			return Promise.reject<IHttpResponse>(
@@ -35,23 +40,16 @@ export class HttpClient implements IHttpClient {
 		}
 
 		var options = this.getHttpOptions('GET', parsedUrl);
-		var httpModule = parsedUrl.protocol === 'https:' ? https : http;
 
-		return new Promise<IHttpResponse>((resolve, reject) => {
-			var req = httpModule.request(options, resp => {
+		return this.transport.transfer(parsedUrl, options).then(resp => {
 
-				if (this.handleStatusCodes(resp, url, parsedUrl, resolve, reject))
-					return;
+			var newResp = this.handleStatusCodes(url,
+				resp.statusCode, resp.headers);
 
-				// Continuously update stream with data
-				//resp.setEncoding('utf8');
-				var body = '';
-				resp.on('data', d => body += d);
-				resp.on('end', () => resolve({ url: url, data: body }));
-			});
+			if (newResp)
+				return newResp;
 
-			req.on('error', err => reject(err.message));
-			req.end();
+			return { url: url, data: resp.data };
 		});
 	}
 
@@ -69,35 +67,31 @@ export class HttpClient implements IHttpClient {
 		};
 	}
 
-	// Returns true if response processing should not continue.
-	private handleStatusCodes(resp: http.IncomingMessage,
-		url: string, parsedUrl: urls.Url,
-		resolve: (data: any) => void, reject: (data: any) => void) {
+	// Can return a new response to be returned from the client.
+	private handleStatusCodes(url: string, statusCode: number,
+		headers: {}): Promise<IHttpResponse> {
 
-		var statusCode = resp.statusCode;
 		if (this.isInRange(statusCode, 200))
-			return false;
+			return null;
 
+		var location: string = (<any>headers).location;
 		var redirectCodes = [300, 301, 307, 410];
-		if (this.isValue(statusCode, redirectCodes) && resp.headers.location) {
-			var newUrlPath = <string>resp.headers.location;
-			var newUrl = urls.resolve(url, newUrlPath);
+		if (this.isValue(statusCode, redirectCodes) && location) {
+			var newUrl = urls.resolve(url, location);
 			if (newUrl !== url) {
 				this.log.info(`Received ${statusCode} from ${url}`);
 				this.log.info(`Going to new url  ${newUrl}`);
-				resolve(this.get(newUrl));
-				return true;
+				return this.get(newUrl);
 			}
 		}
 
 		if (!this.isInRange(statusCode, 200)) {
 			this.log.error(`Received status code ${statusCode} for url ${url} with headers:`);
-			this.log.error(resp.headers);
-			reject(`Received status code ${statusCode} for url ${url}`);
-			return true;
+			this.log.error(headers);
+			throw `Received status code ${statusCode} for url ${url}`;
 		}
 
-		return false;
+		return null;
 	}
 
 	private isInRange(value: number, numb: number) {
@@ -106,5 +100,9 @@ export class HttpClient implements IHttpClient {
 
 	private isValue(value: number, numbs: number[]) {
 		return numbs.some(n => value === n);
+	}
+
+	private startsWith(str: string, values: string[]) {
+		return values.some(v => str.indexOf(v) === 0);
 	}
 }
