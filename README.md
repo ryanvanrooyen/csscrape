@@ -30,7 +30,7 @@ Results:
 ```
 
 ### csscrape uses simple json and css to describe how you want your data
-Example - Same as previous, but grabbing the first 2 packages and their details:
+Example - Same as above, but get only the first 2 packages and their details:
 
 ```js
 var scraper = require('csscrape')();
