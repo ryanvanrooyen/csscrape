@@ -66,7 +66,7 @@ Results:
 
 
 ### Follow links to scrape related data
-Example - Same as above, but follow each package's link to grab Git URL and status:
+Example - Same as above, but follow each package's link to grab GitHub url from details page:
 
 ```js
 var scraper = require('csscrape')();
