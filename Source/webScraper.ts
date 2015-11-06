@@ -86,7 +86,9 @@ export class WebScraper implements IWebScraper {
 		this.checkIfValidResults();
 		var lastResults = this.currentResults;
 		this.currentResults = null;
-		return lastResults.then(results => {
+
+		var finalPromise = lastResults.then(results => {
+
 			results = results.filter(r => r !== null);
 			var allData = results.map(r => {
 				var data = this.getCurrentData(r);
@@ -97,6 +99,10 @@ export class WebScraper implements IWebScraper {
 			allData.forEach(data => this.addToList(dataList, data));
 			return <T[]>dataList;
 		});
+
+		finalPromise.catch(error => this.log.error(error));
+
+		return finalPromise;
 	}
 
 	private checkIfValidResults() {
