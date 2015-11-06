@@ -31,7 +31,7 @@ function follow(sel) {
 
 function runScraper(url) {
 
-	logger.info(`Scraping ${url}...`);
+	logger.info(`Scraping ${url}`);
 	var scraper = new WebScraper(logger);
 	scraper.get(url);
 
