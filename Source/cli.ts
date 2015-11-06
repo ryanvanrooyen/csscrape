@@ -2,17 +2,21 @@
 import * as fs from 'fs';
 import * as program from 'commander';
 import { WebScraper } from './webScraper';
-import { NullLogger, ConsoleLogger } from './logging';
+import { ILogger, NullLogger, ConsoleLogger } from './logging';
 
-var packageFile = fs.readFileSync('package.json', 'utf8');
-var packageInfo = JSON.parse(packageFile);
-
-var logger = new NullLogger();
-var selector = null;
+var logger: ILogger = new NullLogger();
+var selector: string = null;
 
 function setToVerbose() {
 	logger = new ConsoleLogger();
-	logger.info(`Set to verbose mode.`);
+	logger.info(`Set to verbose mode`);
+}
+
+function getVersion() {
+	var packageFile = fs.readFileSync('package.json', 'utf8');
+	var packageInfo = JSON.parse(packageFile);
+	console.log(packageInfo.version);
+	process.exit(0);
 }
 
 function setSelector(sel) {
@@ -20,7 +24,7 @@ function setSelector(sel) {
 }
 
 function runScraper(url) {
-	logger.info(`Running program...`);
+	logger.info(`Scraping ${url}...`);
 	var scraper = new WebScraper(logger);
 	scraper.get(url)
 	if (selector)
@@ -35,8 +39,8 @@ function runScraper(url) {
 
 
 program
-	.version(packageInfo.version)
 	.usage("cssscrape <url> -s 'selector'")
+	.option('-V, --version', 'output the version number', getVersion)
 	.option('-f, --find <selector>', 'A css selector string')
 	.option('-s, --select <selector>', 'A css selector string or json object', setSelector)
 	.option('-l, --followlink <selector>', 'A css selector string')
@@ -44,8 +48,15 @@ program
 	.action(runScraper)
 	.parse(process.argv);
 
+
 if (!program.args || !program.args.length) {
-    program.help();
+
+	var rawArgs = <string[]>(<any>program).rawArgs;
+	if (rawArgs.indexOf('-V') === -1 &&
+		rawArgs.indexOf('--version') === -1) {
+
+		program.help();
+	}
 }
 
 
