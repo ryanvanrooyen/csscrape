@@ -33,7 +33,6 @@ gulp.task('release-build', function () {
 
 	var tsProject = ts.createProject('tsconfig.json', {
 		declaration: true,
-		noExternalResolve: false,
 		sourceMap: false,
 		removeComments: true
 	});

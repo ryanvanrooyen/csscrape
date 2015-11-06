@@ -6,19 +6,19 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "node/node.d.ts": {
-      "commit": "0dd29bf8253536ae24e61c109524e924ea510046"
+      "commit": "35989a3ab4834b8e8b2b56788f1d4fc46a25dc8d"
     },
     "cheerio/cheerio.d.ts": {
-      "commit": "30387ec3dd6eb426cc48522fd3aef09ada83aa48"
+      "commit": "35989a3ab4834b8e8b2b56788f1d4fc46a25dc8d"
     },
     "mocha/mocha.d.ts": {
-      "commit": "05557455c49043ff0189182e27c9e04403a70802"
+      "commit": "35989a3ab4834b8e8b2b56788f1d4fc46a25dc8d"
     },
     "chai/chai.d.ts": {
-      "commit": "05557455c49043ff0189182e27c9e04403a70802"
+      "commit": "35989a3ab4834b8e8b2b56788f1d4fc46a25dc8d"
     },
     "commander/commander.d.ts": {
-      "commit": "001ca36ba58cef903c4c063555afb07bbc36bb58"
+      "commit": "35989a3ab4834b8e8b2b56788f1d4fc46a25dc8d"
     }
   }
 }

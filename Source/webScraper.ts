@@ -111,7 +111,7 @@ export class WebScraper implements IWebScraper {
 
 	private checkIfValidResults() {
 		if (!this.currentResults)
-			throw 'All scrapings must start with a call to .get()';
+			throw 'All new scrapings must start with a call to .get()';
 	}
 
 	private addToList(list: any[], data: any) {

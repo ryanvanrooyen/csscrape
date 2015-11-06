@@ -44,7 +44,7 @@
   "main": "Bin/webScraper.js",
   "scripts": {
     "test": "gulp test --silent",
-    "prepublish": "gulp release"
+    "prepublish": "tsd update --save && gulp release"
   },
   "typescript": {
     "definition": "Bin/webScraper.d.ts"
