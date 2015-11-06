@@ -4,7 +4,7 @@ import * as program from 'commander';
 import { WebScraper } from './webScraper';
 import { ILogger, NullLogger, ConsoleLogger } from './logging';
 
-/*var logger: ILogger = new NullLogger();
+var logger: ILogger = new NullLogger();
 var selector: string = null;
 
 function setToVerbose() {
@@ -57,10 +57,10 @@ if (!program.args || !program.args.length) {
 
 		program.help();
 	}
-}*/
+}
 
 
-var logger = new ConsoleLogger();
+/*var logger = new ConsoleLogger();
 var scraper = new WebScraper(logger);
 scraper.get('www.themoviedb.org/search', { query: 'cosmos' })
 	.find('.results .item:nth-child(-n+2)')
@@ -79,4 +79,4 @@ scraper.get('www.themoviedb.org/search', { query: 'cosmos' })
 	})
 	.then(null, error => {
 		logger.error(error);
-	});
+	});*/
