@@ -96,7 +96,10 @@ export class WebScraper implements IWebScraper {
 			results = results.filter(r => r !== null);
 			var allData = results.map(r => {
 				var data = this.getCurrentData(r);
-				if (!data) data = r.$.html();
+				// If this is top level result from no selector specifed,
+				// send back the html that was retrieved from the get.
+				if (!data && !r.parentResult && results.length === 1)
+					data = r.$.html();
 				return data;
 			}).filter(d => d);
 			var dataList = [];
