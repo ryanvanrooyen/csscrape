@@ -1,5 +1,5 @@
 # csscrape
-A lightweight, promise-based web scraper for Node.js.
+A simple, lightweight, promise-based web scraper for Node.js.
 
 ## Basic Usage
 Example - Scraping the most dependend-upon packages from NPM's main page:

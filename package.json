@@ -1,6 +1,6 @@
 {
   "name": "csscrape",
-  "description": "A lightweight, promise-based web scraper.",
+  "description": "A simple, lightweight, promise-based web scraper.",
   "version": "0.3.0",
   "author": "Ryan Van Rooyen <ryan.vanrooyen@icloud.com>",
   "repository": {
