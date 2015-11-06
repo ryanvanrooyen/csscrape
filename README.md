@@ -30,7 +30,7 @@ Results:
 ```
 
 ### Use simple json & css to describe the data you want
-Example - Same as above, but get only the first 2 packages and their details:
+Example - Same as above, but only get the first 2 packages and their details:
 
 ```js
 var scraper = require('csscrape')();
