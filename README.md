@@ -2,7 +2,7 @@
 A lightweight, promise-based web scraper for Node.js.
 
 ## Basic Usage
-Scraping the most dependend-upon packages from NPM's main page:
+Example - Scraping the most dependend-upon packages from NPM's main page:
 
 ```js
 var scraper = require('csscrape')();
@@ -12,22 +12,25 @@ scraper.get('www.npmjs.com')
 	.done()
 	.then(results => console.log(results));
 
-// Results:
-// [ 'lodash',
-//   'async',
-//   'request',
-//   'underscore',
-//   'express',
-//   'commander',
-//   'debug',
-//   'chalk',
-//   'q',
-//   'bluebird',
-//   'mkdirp',
-//   'colors' ]
+/*
+Results:
+[ 'lodash',
+  'async',
+  'request',
+  'underscore',
+  'express',
+  'commander',
+  'debug',
+  'chalk',
+  'q',
+  'bluebird',
+  'mkdirp',
+  'colors' ]
+*/
 ```
 
-Grab the first 2 packages and their descriptions:
+### csscrape uses simple json and css to describe how you want your data
+Example - Same as previous, but grabbing the first 2 packages and their details:
 
 ```js
 var scraper = require('csscrape')();
@@ -45,15 +48,17 @@ scraper.get('www.npmjs.com')
 	.done()
 	.then(results => console.log(results));
 
-// Results:
-// [ { name: 'lodash',
-//     info:
-//      { author: '3.10.1',
-//        version: '3.10.1',
-//        updated: '2015-08-04T06:05:06.887Z' } },
-//   { name: 'async',
-//     info:
-//      { author: '1.5.0',
-//        version: '1.5.0',
-//        updated: '2015-10-26T01:41:14.220Z' } } ]
+/*
+Results:
+[ { name: 'lodash',
+    info:
+     { author: '3.10.1',
+       version: '3.10.1',
+       updated: '2015-08-04T06:05:06.887Z' } },
+  { name: 'async',
+    info:
+     { author: '1.5.0',
+       version: '1.5.0',
+       updated: '2015-10-26T01:41:14.220Z' } } ]
+*/
 ```
