@@ -19,14 +19,43 @@ export class HttpClient implements IHttpClient {
 		private transport: IHttpTransport = new HttpTransport()) {
 	}
 
-	get(url: string, query?: {}): Promise<IHttpResponse> {
+	get(url: string, query?: {}) {
+		try {
+			return this.internalGet(url, query);
+		}
+		catch (err) {
+			return Promise.reject<IHttpResponse>(err);
+		}
+	}
+
+	private internalGet(url: string, query?: {}): Promise<IHttpResponse> {
+
+		url = this.validateUrl(url);
+		var parsedUrl = this.parseUrl(url);
+		var options = this.getHttpOptions('GET', parsedUrl);
+
+		return this.transport.transfer(parsedUrl, options).then(resp => {
+
+			var newResp = this.checkStatusCodes(url, resp.statusCode, resp.headers);
+			if (newResp)
+				return newResp;
+
+			return { url: url, data: resp.data };
+		});
+	}
+
+	private validateUrl(url: string, query?: {}) {
 
 		if (!url || !url.length)
-			return Promise.reject<IHttpResponse>('No url specified to http get.');
+			throw 'No url specified to http get.';
 		if (query)
 			url += '?' + querystring.stringify(query);
 		if (url.indexOf('://') === -1)
 			url = 'http://' + url;
+		return url;
+	}
+
+	private parseUrl(url: string) {
 
 		var parsedUrl = urls.parse(url);
 		if (!parsedUrl.protocol || !parsedUrl.protocol.length) {
@@ -35,22 +64,9 @@ export class HttpClient implements IHttpClient {
 		else if (parsedUrl.protocol !== 'http:' &&
 			parsedUrl.protocol !== 'https:') {
 
-			return Promise.reject<IHttpResponse>(
-				'Invalid url protocol to http get request: ' + parsedUrl.protocol);
+			throw `Invalid url protocol to http get request: ${parsedUrl.protocol}`;
 		}
-
-		var options = this.getHttpOptions('GET', parsedUrl);
-
-		return this.transport.transfer(parsedUrl, options).then(resp => {
-
-			var newResp = this.handleStatusCodes(url,
-				resp.statusCode, resp.headers);
-
-			if (newResp)
-				return newResp;
-
-			return { url: url, data: resp.data };
-		});
+		return parsedUrl;
 	}
 
 	private getHttpOptions(method: string, url: urls.Url) {
@@ -68,7 +84,7 @@ export class HttpClient implements IHttpClient {
 	}
 
 	// Can return a new response to be returned from the client.
-	private handleStatusCodes(url: string, statusCode: number,
+	private checkStatusCodes(url: string, statusCode: number,
 		headers: {}): Promise<IHttpResponse> {
 
 		if (this.isInRange(statusCode, 200))

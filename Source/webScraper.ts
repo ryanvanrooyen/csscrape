@@ -247,17 +247,11 @@ export class WebScraper implements IWebScraper {
 
 	private getUrl(url: string, query?: {}, previousResult: IScraperResult = null) {
 
-		if (!url || !url.length)
-			return Promise.reject<IScraperResult>('url could not be found');
-
-		var parsedUrl = urls.parse(url);
-		var isRelativeUrl = !parsedUrl.protocol || !parsedUrl.protocol.length;
-
-		if (isRelativeUrl && !previousResult) {
-			return Promise.reject<IScraperResult>('url must be an absolute url: ' + url);
+		try {
+			url = this.validateUrl(url, previousResult);
 		}
-		else if (isRelativeUrl) {
-			url = urls.resolve(previousResult.currentUrl, url);
+		catch (err) {
+			return Promise.reject<IScraperResult>(err);
 		}
 
 		return this.httpClient.get(url, query).then(resp => {
@@ -272,6 +266,23 @@ export class WebScraper implements IWebScraper {
 			};
 			return result;
 		});
+	}
+
+	private validateUrl(url: string, previousResult: IScraperResult) {
+
+		if (!url || !url.length)
+			throw 'url could not be found';
+
+		var parsedUrl = urls.parse(url);
+		var isRelativeUrl = !parsedUrl.protocol || !parsedUrl.protocol.length;
+
+		if (isRelativeUrl && !previousResult) {
+			throw `url must be an absolute url: ${url}`;
+		}
+		else if (isRelativeUrl) {
+			url = urls.resolve(previousResult.currentUrl, url);
+		}
+		return url;
 	}
 
 	private parseHtml(url: string, html: string) {
