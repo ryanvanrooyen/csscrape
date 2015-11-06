@@ -79,8 +79,8 @@ export class HttpClient implements IHttpClient {
 		if (this.isValue(statusCode, redirectCodes) && location) {
 			var newUrl = urls.resolve(url, location);
 			if (newUrl !== url) {
-				this.log.info(`Received ${statusCode} from ${url}`);
-				this.log.info(`Going to new url  ${newUrl}`);
+				this.log.warn(`Received ${statusCode} from ${url}`);
+				this.log.warn(`Going to new url  ${newUrl}`);
 				return this.get(newUrl);
 			}
 		}

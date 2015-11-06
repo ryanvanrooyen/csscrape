@@ -4,7 +4,7 @@ import { NullLogger } from '../Source/logging';
 import { MockHttpTransport } from './mockHttpTransport';
 import { assert } from 'chai';
 
-describe.only("HttpClient", () => {
+describe("HttpClient", () => {
 
 	it("will assume http:// if no protocol specified", () => {
 
