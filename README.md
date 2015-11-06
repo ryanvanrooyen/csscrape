@@ -2,7 +2,8 @@
 A simple, lightweight, promise-based web scraper for Node.js.
 
 ## Basic Usage
-Example - Scraping the most dependend-upon packages from NPM's main page:
+###### Example
+Scraping the most dependend-upon packages from NPM's main page:
 
 ```js
 var scraper = require('csscrape')();
@@ -31,7 +32,8 @@ Results:
 
 
 ### Use simple JSON & CSS to describe the data you want
-Example - Same as above, but only get the first 2 packages and their details:
+###### Example
+Same as above, but only get the first 2 packages and their details:
 
 ```js
 var scraper = require('csscrape')();
@@ -66,7 +68,8 @@ Results:
 
 
 ### Follow links to scrape related data
-Example - Same as above, but follow each package's link to grab GitHub url from details page:
+###### Example
+Same as above, but follow each package's link to grab GitHub url from details page:
 
 ```js
 var scraper = require('csscrape')();
