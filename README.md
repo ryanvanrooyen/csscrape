@@ -10,7 +10,7 @@ $ npm install csscrape
 ```
 
 ## Basic Usage
-###### Example - [Try it out in your browser!](https://tonicdev.com/ryanvanrooyen/csscrape-1)
+###### Example - [Try it out in your browser](https://tonicdev.com/npm/csscrape)
 Scraping the most dependend-upon packages from NPM's main page:
 
 ```js
@@ -30,7 +30,7 @@ Results:
 
 
 ### Use simple JSON & CSS to describe the data you want
-###### Example - [Try it out in your browser!](https://tonicdev.com/ryanvanrooyen/csscrape-2)
+###### Example - [Try it out in your browser](https://tonicdev.com/npm/csscrape)
 Same as above, but only get the first 2 packages and their details:
 
 ```js
@@ -66,7 +66,7 @@ Results:
 
 
 ### Follow links to scrape related data
-###### Example - [Try it out in your browser!](https://tonicdev.com/ryanvanrooyen/csscrape-3)
+###### Example - [Try it out in your browser](https://tonicdev.com/npm/csscrape)
 Same as above, but follow each package's link to grab GitHub url from details page:
 
 ```js
