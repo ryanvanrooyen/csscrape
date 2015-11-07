@@ -46,7 +46,7 @@
     "prepublish": "tsd update --save && gulp release"
   },
   "typescript": {
-    "definition": "Bin/webScraper.d.ts"
+    "definition": "Bin/csscrape.d.ts"
   },
   "tonicExampleFilename": "Examples/basicExample.js"
 }
