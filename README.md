@@ -1,6 +1,14 @@
 # csscrape
 A simple, lightweight, promise-based web scraper for Node.js.
 
+[![NPM Version][npm-image]][npm-url]
+
+## Install
+
+```sh
+$ npm install csscrape
+```
+
 ## Basic Usage
 ###### Example
 Scraping the most dependend-upon packages from NPM's main page:
