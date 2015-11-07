@@ -150,7 +150,7 @@ _Every scrape **must** begin with a call to .get(url) and end with a call to .do
 **csscrape** also provides a CLI
 
 ```sh
-Usage: cssscrape <url>
+Usage: csscrape <url>
 
   Options:
 
