@@ -174,9 +174,7 @@ Same as first example, but using the CLI
 ```sh
 csscrape www.npmjs.com -s '.packages .name'
 
-#
 # Results:
 # [ 'lodash', 'async', 'request', 'underscore', 'express', 'commander',
 #   'debug', 'chalk', 'q', 'bluebird', 'mkdirp', 'colors' ]
-#
 ```
