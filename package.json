@@ -16,7 +16,6 @@
     "css",
     "data",
     "aggregation",
-    "search",
     "promise",
     "cheerio"
   ],

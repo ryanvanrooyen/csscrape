@@ -6,7 +6,7 @@ A simple, lightweight, promise-based web scraper for Node.js.
 Scraping the most dependend-upon packages from NPM's main page:
 
 ```js
-var scraper = require('csscrape')();
+var scraper = require('csscrape').scraper;
 
 scraper.get('www.npmjs.com')
 	.select('.packages .name')
@@ -36,7 +36,7 @@ Results:
 Same as above, but only get the first 2 packages and their details:
 
 ```js
-var scraper = require('csscrape')();
+var scraper = require('csscrape').scraper;
 
 scraper.get('www.npmjs.com')
 	.filter('.packages li:nth-child(-n+2)')
@@ -72,7 +72,7 @@ Results:
 Same as above, but follow each package's link to grab GitHub url from details page:
 
 ```js
-var scraper = require('csscrape')();
+var scraper = require('csscrape').scraper;
 
 scraper.get('www.npmjs.com')
 	.filter('.packages li:nth-child(-n+2)')
