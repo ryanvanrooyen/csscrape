@@ -10,7 +10,7 @@ $ npm install csscrape
 ```
 
 ## Basic Usage
-###### Example [Test it out in your browser](https://tonicdev.com/ryanvanrooyen/csscrape-1)
+###### Example - [Try it out in your browser!](https://tonicdev.com/ryanvanrooyen/csscrape-1)
 Scraping the most dependend-upon packages from NPM's main page:
 
 ```js
