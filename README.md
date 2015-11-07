@@ -120,7 +120,7 @@ filter(selector);
 
 /**
  * Select data from the current data context
- * @param {string | {}} propertySelectors - a css selector string or complex selector object
+ * @param {string | {}} propertySelectors - a css selector string or selector object
  */
 select(propertySelectors);
 
@@ -135,4 +135,4 @@ follow(selector);
  */
 done();
 ```
-Every scrape must begin with a call to .get(url) and end with a call to .done()
+_Every scrape **must** begin with a call to .get(url) and end with a call to .done()_
