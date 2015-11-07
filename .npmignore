@@ -27,6 +27,7 @@ coverage
 /.vscode
 gulpfile.js
 .travis.yml
+jsconfig.json
 
 # Ignore the TypeScript build files and typing dependencies.
 tsconfig.json
