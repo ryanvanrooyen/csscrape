@@ -32,7 +32,6 @@ gulp.task('dev', function () {
 gulp.task('release-build', function () {
 
 	var tsProject = ts.createProject('tsconfig.json', {
-		declaration: true,
 		sourceMap: false,
 		removeComments: true
 	});
@@ -51,7 +50,13 @@ gulp.task('release-build', function () {
 });
 
 
-gulp.task('release', ['release-build'], function () {
+gulp.task('copy-def', function () {
+	return gulp.src('Source/csscrape.d.ts')
+		.pipe(gulp.dest('./Bin'));
+});
+
+
+gulp.task('release', ['release-build', 'copy-def'], function () {
 
 	return gulp.src('Bin/csscrape.js')
 		.pipe(insert.prepend('#! /usr/bin/env node \n'))
