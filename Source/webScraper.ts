@@ -313,6 +313,8 @@ export class WebScraper implements IWebScraper {
 	}
 }
 
+export var scraper = new WebScraper();
+
 interface IScraperResult {
 	parentResult: IScraperResult;
 	$: CheerioStatic;
