@@ -9,6 +9,7 @@
 	// Configure glob patterns for excluding files and folders.
 	"files.exclude": {
 		".vscode": true,
+		"Bin": true,
 		"node_modules": true,
 		"typings": true,
 		"**/*.js.map": true,
