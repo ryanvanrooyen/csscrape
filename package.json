@@ -43,7 +43,7 @@
   "main": "Bin/webScraper.js",
   "scripts": {
     "test": "gulp test --silent",
-    "prepublish": "tsd update --save && gulp release"
+    "prepublish": "gulp release"
   },
   "typescript": {
     "definition": "Bin/csscrape.d.ts"
