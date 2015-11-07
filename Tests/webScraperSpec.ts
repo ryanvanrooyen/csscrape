@@ -60,7 +60,7 @@ describe("WebScraper", () => {
 		var scraper = createScraper();
 
 		scraper.get(url, {})
-			.find('.results')
+			.filter('.results')
 			.select({'titles[]': 'dt'})
 			.done<any>().then(values => {
 
@@ -79,7 +79,7 @@ describe("WebScraper", () => {
 		var scraper = createScraper();
 
 		scraper.get(url, {})
-			.find('.results dl')
+			.filter('.results dl')
 			.select({'title': 'dt'})
 			.done().then(values => {
 
@@ -96,7 +96,7 @@ describe("WebScraper", () => {
 		var scraper = createScraper(true);
 
 		scraper.get(url, {})
-			.find('.results dl')
+			.filter('.results dl')
 			.select({
 				info: 'dd span[title]'
 			})
@@ -121,7 +121,7 @@ describe("WebScraper", () => {
 		var scraper = createScraper();
 
 		scraper.get(url, {})
-			.find('.results dl')
+			.filter('.results dl')
 			.select({'info' : 'dd span[testAttr^="attr"]'})
 			.done<any>().then(values => {
 
@@ -137,7 +137,7 @@ describe("WebScraper", () => {
 		var scraper = createScraper();
 
 		scraper.get(url, {})
-			.find('.results dl')
+			.filter('.results dl')
 			.select({'info' : 'dd span[testAttr^=attr]'})
 			.done().then(values => {
 
@@ -153,7 +153,7 @@ describe("WebScraper", () => {
 		var scraper = createScraper();
 
 		scraper.get(url, {})
-			.find('.results dl')
+			.filter('.results dl')
 			.select({'info': 'dd span[testAttr="attr3"]'})
 			.done().then(values => {
 
@@ -167,7 +167,7 @@ describe("WebScraper", () => {
 		var scraper = createScraper();
 
 		scraper.get(url, {})
-			.find('.results dl')
+			.filter('.results dl')
 			.select({'info': 'dd span[testAttr=attr3]'})
 			.done().then(values => {
 
@@ -181,7 +181,7 @@ describe("WebScraper", () => {
 		var scraper = createScraper();
 
 		scraper.get(url, {})
-			.find('.results dl')
+			.filter('.results dl')
 			.select({
 				'title': 'a',
 				'prop1': '.a',
@@ -228,7 +228,7 @@ describe("WebScraper", () => {
 		var scraper = createScraper();
 
 		scraper.get(url, {})
-			.find('.results dl')
+			.filter('.results dl')
 			.select({
 				'title' : 'dt',
 				'info' : {
@@ -314,7 +314,7 @@ describe("WebScraper", () => {
 		var scraper = createScraper();
 
 		scraper.get(url, {})
-			.find('dl:nth-child(2)')
+			.filter('dl:nth-child(2)')
 			.select('dt')
 			.done().then(values => {
 				assert.lengthOf(values, 1);
@@ -327,7 +327,7 @@ describe("WebScraper", () => {
 		var scraper = createScraper();
 
 		scraper.get(url, {})
-			.find('dl:nth-child(2*n)')
+			.filter('dl:nth-child(2*n)')
 			.select('dt')
 			.done().then(values => {
 				assert.lengthOf(values, 2);
@@ -341,7 +341,7 @@ describe("WebScraper", () => {
 		var scraper = createScraper();
 
 		scraper.get(url, {})
-			.find('.results dl:nth-child(-n+2)')
+			.filter('.results dl:nth-child(-n+2)')
 			.select('dt')
 			.done().then(values => {
 				assert.lengthOf(values, 2);
@@ -364,10 +364,10 @@ describe("WebScraper", () => {
 	var runFollowLinksTest = function(scraper: WebScraper, done: () => void) {
 
 		scraper.get(url, {})
-			.find('.results dl')
+			.filter('.results dl')
 			.select({'title': 'dt',})
 			.follow('dt > a')
-			.find('.details > dl')
+			.filter('.details > dl')
 			.select({'details[]': {'name': 'dt'}})
 			.follow('a')
 			.select({'extraInfo[]': 'div'})

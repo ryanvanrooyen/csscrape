@@ -15,18 +15,8 @@ scraper.get('www.npmjs.com')
 
 /*
 Results:
-[ 'lodash',
-  'async',
-  'request',
-  'underscore',
-  'express',
-  'commander',
-  'debug',
-  'chalk',
-  'q',
-  'bluebird',
-  'mkdirp',
-  'colors' ]
+[ 'lodash', 'async', 'request', 'underscore', 'express', 'commander',
+  'debug', 'chalk', 'q', 'bluebird', 'mkdirp', 'colors' ]
 */
 ```
 
@@ -43,7 +33,7 @@ scraper.get('www.npmjs.com')
 	.select({
 		name: '.name',
 		info: {
-			author: '.author a',
+			author: '.author a:nth-child(2)',
 			version: '.version',
 			updated: '.author span'
 		}
@@ -55,12 +45,12 @@ scraper.get('www.npmjs.com')
 Results:
 [ { name: 'lodash',
     info:
-     { author: '3.10.1',
+     { author: 'jdalton,
        version: '3.10.1',
        updated: '2015-08-04T06:05:06.887Z' } },
   { name: 'async',
     info:
-     { author: '1.5.0',
+     { author: 'aearly,
        version: '1.5.0',
        updated: '2015-10-26T01:41:14.220Z' } } ]
 */
@@ -79,7 +69,7 @@ scraper.get('www.npmjs.com')
 	.select({
 		name: '.name',
 		info: {
-			author: '.author a',
+			author: '.author a:nth-child(2)',
 			version: '.version',
 			updated: '.author span'
 		}
@@ -95,7 +85,7 @@ scraper.get('www.npmjs.com')
 Results:
 [ { name: 'lodash',
     info: {
-		author: '3.10.1',
+		author: 'jdalton',
     	version: '3.10.1',
     	updated: '2015-08-04T06:05:06.887Z'
 	},
@@ -103,7 +93,7 @@ Results:
   },
   { name: 'async',
     info: {
-		author: '1.5.0',
+		author: 'aearly',
     	version: '1.5.0',
     	updated: '2015-10-26T01:41:14.220Z'
 	},
@@ -111,3 +101,38 @@ Results:
   } ]
 */
 ```
+
+## Simple API
+You can scrape for data using the five following methods:
+```js
+/**
+ * Get the initial url to start the scrape
+ * @param {string} url - the url of the page to scrape
+ * @param {{}} query? - optional query to be parsed by Node's querystring
+ */
+get(url, query);
+
+/**
+ * Filter down the current results to create a new data context
+ * @param {string} selector - a css selector string
+ */
+filter(selector);
+
+/**
+ * Select data from the current data context
+ * @param {string | {}} propertySelectors - a css selector string or complex selector object
+ */
+select(propertySelectors);
+
+/**
+ * Find a link in the current data context to follow to continue scraping
+ * @param {string} selector - a css selector string
+ */
+follow(selector);
+
+/**
+ * Marks the current scrape as finished and returns a Promise of the results
+ */
+done();
+```
+Every scrape must begin with a call to .get(url) and end with a call to .done()

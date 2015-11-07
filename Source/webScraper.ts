@@ -8,7 +8,7 @@ import { ICssParser, ISelectorDetails, CssParser } from './cssParser';
 
 export interface IWebScraper {
 	get(url: string, query?: {}): IWebScraper;
-	find(selector: string): IWebScraper;
+	filter(selector: string): IWebScraper;
 	select(propertySelectors: string | {}): IWebScraper,
 	follow(selector: string): IWebScraper;
 	done<T>(): Promise<T[]>;
@@ -32,7 +32,7 @@ export class WebScraper implements IWebScraper {
 		return this;
 	}
 
-	find(selector: string) {
+	filter(selector: string) {
 		this.checkIfValidResults();
 		this.currentResults = this.currentResults.then(results => {
 			results = results.filter(r => r !== null);

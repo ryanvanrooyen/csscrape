@@ -13,9 +13,9 @@ function setVerbose() {
 	logger.info(`Set to verbose mode`);
 }
 
-function find(sel) {
+function filter(sel) {
 	if (!sel) return;
-	options.push({ 'find': sel });
+	options.push({ 'filter': sel });
 }
 
 function select(sel) {
@@ -61,9 +61,9 @@ program
 	.usage("cssscrape <url> -s 'selector'")
 	.action(runScraper)
 	.option('-V, --version', 'output the version number', getVersion)
-	.option('-f, --find <selector>', 'A css selector string', find, [])
-	.option('-s, --select <selector>', 'A css selector string or json object', select, [])
-	.option('-l, --followlink <selector>', 'A css selector string', follow, [])
+	.option('-f, --filter <selector>', 'Filter to specific data in the results', filter, [])
+	.option('-s, --select <selector>', 'Select data from the results (string or json string)', select, [])
+	.option('-l, --followlink <selector>', 'Select a link from the data to follow', follow, [])
 	.option('-v, --verbose', 'Set logging to verbose', setVerbose)
 	.parse(process.argv);
 
