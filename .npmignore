@@ -33,4 +33,3 @@ jsconfig.json
 tsconfig.json
 tsd.json
 /typings
-/Bin/cli.d.ts
