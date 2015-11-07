@@ -30,7 +30,7 @@ Results:
 
 
 ### Use simple JSON & CSS to describe the data you want
-###### Example
+###### Example - [Try it out in your browser!](https://tonicdev.com/ryanvanrooyen/csscrape-2)
 Same as above, but only get the first 2 packages and their details:
 
 ```js
@@ -66,7 +66,7 @@ Results:
 
 
 ### Follow links to scrape related data
-###### Example
+###### Example - [Try it out in your browser!](https://tonicdev.com/ryanvanrooyen/csscrape-3)
 Same as above, but follow each package's link to grab GitHub url from details page:
 
 ```js
