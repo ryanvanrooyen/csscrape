@@ -3,7 +3,7 @@ A simple, lightweight, promise-based web scraper for Node.js.
 
 [![npm version](https://badge.fury.io/js/csscrape.svg)](https://badge.fury.io/js/csscrape)
 
-## Install
+### Install
 
 ```sh
 $ npm install csscrape
@@ -144,3 +144,39 @@ follow(selector);
 done();
 ```
 _Every scrape **must** begin with a call to .get(url) and end with a call to .done()_
+
+
+## Command Line Interface
+**csscrape** also provides a CLI
+
+```sh
+Usage: cssscrape <url>
+
+  Options:
+
+    -h, --help                   output usage information
+    -V, --version                output the version number
+    -f, --filter <selector>      Filter to specific data in the results
+    -s, --select <selector>      Select data from the results (string or json string)
+    -l, --followlink <selector>  Select a link from the data to follow
+    -v, --verbose                Set logging to verbose
+```
+
+### Install
+
+```sh
+$ npm install csscrape -g
+```
+
+###### Example
+Same as first example, but using the CLI
+
+```sh
+csscrape www.npmjs.com -s '.packages .name'
+
+#
+# Results:
+# [ 'lodash', 'async', 'request', 'underscore', 'express', 'commander',
+#   'debug', 'chalk', 'q', 'bluebird', 'mkdirp', 'colors' ]
+#
+```

@@ -58,7 +58,7 @@ function getVersion() {
 }
 
 program
-	.usage("cssscrape <url> -s 'selector'")
+	.usage("cssscrape <url>")
 	.action(runScraper)
 	.option('-V, --version', 'output the version number', getVersion)
 	.option('-f, --filter <selector>', 'Filter to specific data in the results', filter, [])
