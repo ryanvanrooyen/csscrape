@@ -53,7 +53,7 @@ gulp.task('release-build', function () {
 
 gulp.task('release', ['release-build'], function () {
 
-	return gulp.src('Bin/cli.js')
+	return gulp.src('Bin/csscrape.js')
 		.pipe(insert.prepend('#! /usr/bin/env node \n'))
 		.pipe(gulp.dest('./Bin'));
 });

@@ -19,7 +19,7 @@
     "promise",
     "cheerio"
   ],
-  "bin": "Bin/cli.js",
+  "bin": "Bin/csscrape.js",
   "engines": {
     "node": ">=4.0.0"
   },
