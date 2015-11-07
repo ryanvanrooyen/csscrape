@@ -47,5 +47,6 @@
   },
   "typescript": {
     "definition": "Bin/webScraper.d.ts"
-  }
+  },
+  "tonicExampleFilename": "Examples/basicExample.js"
 }

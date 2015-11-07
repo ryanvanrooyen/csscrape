@@ -24,6 +24,7 @@ node_modules
 *.js
 *.js.map
 !gulpfile.js
+!Examples/**/*.js
 
 # Don't include the TypeScript typing files
 /typings
