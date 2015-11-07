@@ -2,6 +2,7 @@
 A simple, lightweight, promise-based web scraper for Node.js.
 
 [![npm version](https://badge.fury.io/js/csscrape.svg)](https://badge.fury.io/js/csscrape)
+[![Build Status](https://travis-ci.org/ryanvanrooyen/csscrape.svg?branch=master)](https://travis-ci.org/ryanvanrooyen/csscrape)
 
 ### Install
 
