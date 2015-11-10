@@ -73,8 +73,10 @@ export class WebScraper implements IWebScraper {
 				else
 					attribute = parsedSelector.attrFilter(cheerio);
 
-				return this.createAlwaysResolvedPromise(
-					this.getUrl(attribute, null, r));
+				return this.getUrl(attribute, null, r).catch(err => {
+					this.log.error(err);
+					return null;
+				});
 			});
 
 			if (!loads.length)
@@ -107,7 +109,10 @@ export class WebScraper implements IWebScraper {
 			return <T[]>dataList;
 		});
 
-		finalPromise.catch(error => this.log.error(error));
+		finalPromise.catch(error => {
+			this.log.error(error);
+			throw error;
+		});
 
 		return finalPromise;
 	}
@@ -301,15 +306,6 @@ export class WebScraper implements IWebScraper {
 
 	private flatten<T>(values: T[][]) {
 		return values.reduce((x, y) => x.concat(y), []);
-	}
-
-	private createAlwaysResolvedPromise<T>(promise: Promise<T>) {
-		return new Promise<T>((resolve, reject) => {
-			promise
-				.then(value => resolve(value))
-				.then(null, error => this.log.error(error))
-				.then(null, error => resolve(null))
-		});
 	}
 }
 
