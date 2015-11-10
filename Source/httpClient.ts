@@ -30,7 +30,7 @@ export class HttpClient implements IHttpClient {
 
 	private internalGet(url: string, query?: {}): Promise<IHttpResponse> {
 
-		url = this.validateUrl(url);
+		url = this.validateUrl(url, query);
 		var parsedUrl = this.parseUrl(url);
 		var options = this.getHttpOptions('GET', parsedUrl);
 
