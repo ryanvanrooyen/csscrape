@@ -202,7 +202,8 @@ export class WebScraper implements IWebScraper {
 		if (dataShouldBeArray) {
 			if (!data[prop])
 				data[prop] = [];
-			data[prop] = data[prop].concat(values);
+			var newValues = data[prop].concat(values);
+			data[prop] = newValues.filter((v, i) => newValues.indexOf(v) === i);
 		}
 		else {
 			data[prop] = values[0] || null;
@@ -242,6 +243,7 @@ export class WebScraper implements IWebScraper {
 			return value && value.trim();
 		});
 		values = values.filter(v => v && v.length > 0);
+		values = values.filter((v, i) => values.indexOf(v) === i);
 		return values;
 	}
 
