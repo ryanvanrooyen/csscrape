@@ -380,21 +380,21 @@ describe("WebScraper", () => {
 				assert.lengthOf(value.details, 2);
 				assert.propertyVal(value.details[0], 'name', 'Entry Details Info 2');
 				assert.propertyVal(value.details[1], 'name', 'Entry Details Info 3');
-				assert.lengthOf(value.extraInfo, 2);
+				assert.lengthOf(value.extraInfo, 1);
 
 				var value = values[1];
 				assert.propertyVal(value, 'title', 'Entry: Item 3');
 				assert.lengthOf(value.details, 2);
 				assert.propertyVal(value.details[0], 'name', 'Entry Details Info 2');
 				assert.propertyVal(value.details[1], 'name', 'Entry Details Info 3');
-				assert.lengthOf(value.extraInfo, 2);
+				assert.lengthOf(value.extraInfo, 1);
 
 				var value = values[2];
 				assert.propertyVal(value, 'title', 'Entry: Item 4');
 				assert.lengthOf(value.details, 2);
 				assert.propertyVal(value.details[0], 'name', 'Entry Details Info 2');
 				assert.propertyVal(value.details[1], 'name', 'Entry Details Info 3');
-				assert.lengthOf(value.extraInfo, 2);
+				assert.lengthOf(value.extraInfo, 1);
 			})
 			.then(done, done);
 	}
