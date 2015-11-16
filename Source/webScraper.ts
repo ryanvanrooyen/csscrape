@@ -82,7 +82,12 @@ export class WebScraper implements IWebScraper {
 			if (!loads.length)
 				throw ('could not find data to follow: ' + selector);
 
-			return Promise.all(loads);
+			var start = new Date();
+			return Promise.all(loads).then(values => {
+				var timing = this.getTiming(start);
+				this.log.info(`Loaded ${loads.length} url(s) in ${timing} seconds`);
+				return values;
+			})
 		});
 
 		return this;
@@ -264,7 +269,11 @@ export class WebScraper implements IWebScraper {
 			return Promise.reject<IScraperResult>(err);
 		}
 
+		var start = new Date();
 		return this.httpClient.get(url, query).then(resp => {
+
+			var timing = this.getTiming(start);
+			this.log.info(`Loaded url ${resp.url} in ${timing} seconds`);
 
 			var $ = this.parseHtml(url, resp.data);
 			var result: IScraperResult = {
@@ -276,6 +285,13 @@ export class WebScraper implements IWebScraper {
 			};
 			return result;
 		});
+	}
+
+	private getTiming(start: Date) {
+		var end = new Date();
+		var ms = end.getTime() - start.getTime();
+		var secs = ms / 1000;
+		return secs;
 	}
 
 	private validateUrl(url: string, previousResult: IScraperResult) {
