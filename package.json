@@ -3,6 +3,7 @@
   "description": "A simple, lightweight, promise-based web scraper.",
   "version": "1.1.8",
   "author": "Ryan Van Rooyen <ryan.vanrooyen@icloud.com>",
+  "typings": "Bin/csscrape.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/ryanvanrooyen/csscrape"
@@ -34,19 +35,16 @@
     "gulp-mocha": "^2.1.3",
     "gulp-plumber": "^1.0.1",
     "gulp-sourcemaps": "^1.6.0",
-    "gulp-typescript": "^2.9.2",
+    "gulp-typescript": "^2.12.0",
     "merge2": "^0.3.6",
     "tsd": "^0.6.4",
-    "typescript": "^1.6.2"
+    "typescript": "^1.8.2"
   },
   "license": "MIT",
   "main": "Bin/webScraper.js",
   "scripts": {
     "test": "gulp test --silent",
     "prepublish": "gulp release"
-  },
-  "typescript": {
-    "definition": "Bin/csscrape.d.ts"
   },
   "tonicExampleFilename": "Examples/basicExample.js"
 }
