@@ -61,7 +61,7 @@ program
 	.usage('<url>')
 	.option('-V, --version', 'output the version number', getVersion)
 	.option('-f, --filter <selector>', 'Filter to specific data in the results', filter, [])
-	.option('-s, --select <selector>', 'Select data from the results (string or json string)', select, [])
+	.option('-s, --select <selector>', 'Data selector (string or json string)', select, [])
 	.option('-l, --followlink <selector>', 'Select a link from the data to follow', follow, [])
 	.option('-v, --verbose', 'Set logging to verbose', setVerbose)
 	.action(runScraper)

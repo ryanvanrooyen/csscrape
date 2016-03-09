@@ -141,7 +141,7 @@ filter(selector);
 
 /**
  * Select data from the current data context
- * @param {string | {}} propertySelectors - a css selector string or selector object
+ * @param {string | {}} propertySelectors - a css selector string/object
  */
 select(propertySelectors);
 
@@ -170,7 +170,7 @@ Usage: csscrape <url>
     -h, --help                   output usage information
     -V, --version                output the version number
     -f, --filter <selector>      Filter to specific data in the results
-    -s, --select <selector>      Select data from the results (string or json string)
+    -s, --select <selector>      Data selector (string or json string)
     -l, --followlink <selector>  Select a link from the data to follow
     -v, --verbose                Set logging to verbose
 ```
