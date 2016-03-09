@@ -52,16 +52,24 @@ scraper.get('www.npmjs.com')
 
 /*
 Results:
-[ { name: 'lodash',
-    info:
-    {    author: 'jdalton,
-         version: '3.10.1',
-         updated: '2015-08-04T06:05:06.887Z' } },
-  { name: 'async',
-    info:
-    {    author: 'aearly,
-         version: '1.5.0',
-         updated: '2015-10-26T01:41:14.220Z' } } ]
+[
+  {
+    name: 'lodash',
+    info: {
+        author: 'jdalton,
+        version: '3.10.1',
+        updated: '2015-08-04T06:05:06.887Z'
+    }
+  },
+  {
+    name: 'async',
+    info: {
+        author: 'aearly,
+        version: '1.5.0',
+        updated: '2015-10-26T01:41:14.220Z'
+    }
+  }
+]
 */
 ```
 
@@ -74,40 +82,44 @@ Same as above, but follow each package's link to grab GitHub url from details pa
 var scraper = require('csscrape').scraper;
 
 scraper.get('www.npmjs.com')
-	.filter('.packages li:nth-child(-n+2)')
-	.select({
-		name: '.name',
-		info: {
-			author: '.author a:nth-child(2)',
-			version: '.version',
-			updated: '.author span'
-		}
-	})
-	.follow('h3 a')
-	.select({
-		gitUrl: '.sidebar a[href^=https://github.com]'
-	})
-	.done()
-	.then(results => console.log(results));
+    .filter('.packages li:nth-child(-n+2)')
+    .select({
+        name: '.name',
+        info: {
+            author: '.author a:nth-child(2)',
+            version: '.version',
+            updated: '.author span'
+        }
+    })
+    .follow('h3 a')
+    .select({
+        gitUrl: '.sidebar a[href^=https://github.com]'
+    })
+    .done()
+    .then(results => console.log(results));
 
 /*
 Results:
-[ { name: 'lodash',
+[
+  {
+    name: 'lodash',
     info: {
-		author: 'jdalton',
-    	version: '3.10.1',
-    	updated: '2015-08-04T06:05:06.887Z'
-	},
+        author: 'jdalton,
+        version: '3.10.1',
+        updated: '2015-08-04T06:05:06.887Z'
+    }
     gitUrl: 'https://github.com/lodash/lodash'
   },
-  { name: 'async',
+  {
+    name: 'async',
     info: {
-		author: 'aearly',
-    	version: '1.5.0',
-    	updated: '2015-10-26T01:41:14.220Z'
-	},
+        author: 'aearly,
+        version: '1.5.0',
+        updated: '2015-10-26T01:41:14.220Z'
+    }
     gitUrl: 'https://github.com/caolan/async'
-  } ]
+  }
+]
 */
 ```
 
