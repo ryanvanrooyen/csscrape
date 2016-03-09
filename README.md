@@ -18,9 +18,9 @@ Scraping the most dependend-upon packages from NPM's main page:
 var scraper = require('csscrape').scraper;
 
 scraper.get('www.npmjs.com')
-	.select('.packages .name')
-	.done()
-	.then(results => console.log(results));
+    .select('.packages .name')
+    .done()
+    .then(results => console.log(results));
 
 /*
 Results:
@@ -38,30 +38,30 @@ Same as above, but only get the first 2 packages and their details:
 var scraper = require('csscrape').scraper;
 
 scraper.get('www.npmjs.com')
-	.filter('.packages li:nth-child(-n+2)')
-	.select({
-		name: '.name',
-		info: {
-			author: '.author a:nth-child(2)',
-			version: '.version',
-			updated: '.author span'
-		}
-	})
-	.done()
-	.then(results => console.log(results));
+    .filter('.packages li:nth-child(-n+2)')
+    .select({
+        name: '.name',
+        info: {
+            author: '.author a:nth-child(2)',
+            version: '.version',
+            updated: '.author span'
+        }
+    })
+    .done()
+    .then(results => console.log(results));
 
 /*
 Results:
 [ { name: 'lodash',
     info:
-     { author: 'jdalton,
-       version: '3.10.1',
-       updated: '2015-08-04T06:05:06.887Z' } },
+    {    author: 'jdalton,
+         version: '3.10.1',
+         updated: '2015-08-04T06:05:06.887Z' } },
   { name: 'async',
     info:
-     { author: 'aearly,
-       version: '1.5.0',
-       updated: '2015-10-26T01:41:14.220Z' } } ]
+    {    author: 'aearly,
+         version: '1.5.0',
+         updated: '2015-10-26T01:41:14.220Z' } } ]
 */
 ```
 
