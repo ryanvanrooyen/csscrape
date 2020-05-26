@@ -46,7 +46,7 @@
   "main": "bin/scraper.js",
   "scripts": {
     "test": "./node_modules/.bin/gulp test --silent",
-    "prepublish": "./node_modules/.bin/gulp release --silent"
+    "prepublish": "./node_modules/.bin/gulp --silent"
   },
   "tonicExampleFilename": "Examples/tonicExample.js"
 }
