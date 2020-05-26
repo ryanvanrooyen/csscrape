@@ -1,11 +1,14 @@
 
-export var scraper: IWebScraper;
+export var scrape: (url: string) => IScraper;
 
-export interface IWebScraper {
-	get(url: string, query?: {}): IWebScraper;
-	filter(selector: string): IWebScraper;
-	select(propertySelectors: string | {}): IWebScraper,
-	follow(selector: string): IWebScraper;
+export type ObjectSelector = {[prop: string]: ElementSelector | ObjectSelector};
+export type ElementSelector = string | string[];
+export type DataSelector = ElementSelector | ObjectSelector;
+
+export interface IScraper {
+	filter(selector: string): IScraper;
+	select(selector: DataSelector): IScraper,
+	follow(selector: string): IScraper;
 	done<T>(): Promise<T[]>;
 }
 
@@ -15,20 +18,20 @@ export interface ILogger {
 	error(data: any, ...moreData: any[]): void;
 }
 
-export interface IHttpClient {
-	get(url: string, query?: {}): Promise<IHttpResponse>;
-}
-
 export interface IHttpResponse {
 	url: string;
 	data: string;
 }
 
-export class WebScraper implements IWebScraper {
+export interface IHttpClient {
+	get(url: string): Promise<IHttpResponse>;
+}
+
+export class Scraper implements IScraper {
 	constructor(log?: ILogger, httpClient?: IHttpClient);
-	get(url: string, query?: {}): WebScraper;
-	filter(selector: string): WebScraper;
-	select(propertySelectors: string | {}): WebScraper;
-	follow(selector: string): WebScraper;
+	get(url: string): Scraper;
+	filter(selector: string): Scraper;
+	select(selector: DataSelector): Scraper;
+	follow(selector: string): Scraper;
 	done<T>(): Promise<T[]>;
 }

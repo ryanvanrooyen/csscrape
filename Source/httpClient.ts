@@ -1,17 +1,19 @@
 
 import * as urls from 'url';
-import * as querystring from 'querystring';
 import { ILogger, NullLogger } from './logging';
 import { IHttpTransport, HttpTransport} from './httpTransport';
 
+
 export interface IHttpClient {
-	get(url: string, query?: {}): Promise<IHttpResponse>;
+	get(url: string): Promise<IHttpResponse>;
 }
+
 
 export interface IHttpResponse {
 	url: string,
 	data: string
 }
+
 
 export class HttpClient implements IHttpClient {
 
@@ -19,18 +21,20 @@ export class HttpClient implements IHttpClient {
 		private transport: IHttpTransport = new HttpTransport()) {
 	}
 
-	get(url: string, query?: {}) {
+	get(url: string) {
 		try {
-			return this.internalGet(url, query);
+			return this.internalGet(url);
 		}
 		catch (err) {
 			return Promise.reject<IHttpResponse>(err);
 		}
 	}
 
-	private internalGet(url: string, query?: {}): Promise<IHttpResponse> {
-
-		url = this.validateUrl(url, query);
+	private internalGet(url: string): Promise<IHttpResponse> {
+		if (!url || !url.length)
+			throw 'No url specified to http get.';
+		if (url.indexOf('://') === -1)
+			url = 'http://' + url;
 		var parsedUrl = this.parseUrl(url);
 		var options = this.getHttpOptions('GET', parsedUrl);
 
@@ -44,19 +48,7 @@ export class HttpClient implements IHttpClient {
 		});
 	}
 
-	private validateUrl(url: string, query?: {}) {
-
-		if (!url || !url.length)
-			throw 'No url specified to http get.';
-		if (query)
-			url += '?' + querystring.stringify(query);
-		if (url.indexOf('://') === -1)
-			url = 'http://' + url;
-		return url;
-	}
-
 	private parseUrl(url: string) {
-
 		var parsedUrl = urls.parse(url);
 		if (!parsedUrl.protocol || !parsedUrl.protocol.length) {
 			parsedUrl.protocol = 'http:';
@@ -116,9 +108,5 @@ export class HttpClient implements IHttpClient {
 
 	private isValue(value: number, numbs: number[]) {
 		return numbs.some(n => value === n);
-	}
-
-	private startsWith(str: string, values: string[]) {
-		return values.some(v => str.indexOf(v) === 0);
 	}
 }

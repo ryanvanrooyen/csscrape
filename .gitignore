@@ -18,10 +18,13 @@ coverage
 
 # Dependency directory and output files
 node_modules
-/Bin
+/bin
 
 # JavaScript files since this is writtin in TypeScript (except the gulpfile)
 *.js
 *.js.map
 !gulpfile.js
 !Examples/**/*.js
+
+# Editor files
+*.swp

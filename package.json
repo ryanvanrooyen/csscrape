@@ -1,9 +1,9 @@
 {
   "name": "csscrape",
   "description": "A simple, lightweight, promise-based web scraper.",
-  "version": "1.2.5",
+  "version": "2.0.1",
   "author": "Ryan Van Rooyen <ryan.vanrooyen@icloud.com>",
-  "typings": "Bin/csscrape.d.ts",
+  "typings": "Source/csscrape.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/ryanvanrooyen/csscrape"
@@ -20,31 +20,33 @@
     "promise",
     "cheerio"
   ],
-  "bin": "Bin/csscrape.js",
+  "bin": "bin/csscrape.js",
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=12.10.0"
   },
   "dependencies": {
-    "cheerio": "^0.19.0",
-    "commander": "^2.9.0"
+    "cheerio": "^1.0.0-rc.3",
+    "commander": "^5.1.0"
   },
   "devDependencies": {
-    "chai": "^3.3.0",
-    "gulp": "^3.9.0",
+    "@types/chai": "^4.2.11",
+    "@types/cheerio": "^0.22.18",
+    "@types/commander": "^2.12.2",
+    "@types/mocha": "^7.0.2",
+    "chai": "^4.2.0",
+    "gulp": "^4.0.2",
     "gulp-insert": "^0.5.0",
-    "gulp-mocha": "^2.1.3",
-    "gulp-plumber": "^1.0.1",
-    "gulp-sourcemaps": "^1.6.0",
-    "gulp-typescript": "^2.12.0",
-    "merge2": "^0.3.6",
-    "tsd": "^0.6.4",
-    "typescript": "^1.8.2"
+    "gulp-mocha": "^7.0.2",
+    "gulp-plumber": "^1.2.1",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-typescript": "^6.0.0-alpha.1",
+    "typescript": "^3.9.3"
   },
   "license": "MIT",
-  "main": "Bin/webScraper.js",
+  "main": "bin/scraper.js",
   "scripts": {
-    "test": "gulp test --silent",
-    "prepublish": "gulp release"
+    "test": "./node_modules/.bin/gulp test --silent",
+    "prepublish": "./node_modules/.bin/gulp release --silent"
   },
-  "tonicExampleFilename": "Examples/basicExample.js"
+  "tonicExampleFilename": "Examples/tonicExample.js"
 }

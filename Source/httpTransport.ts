@@ -3,15 +3,18 @@ import * as http from 'http';
 import * as https from 'https';
 import { Url } from 'url';
 
+
 export interface IHttpTransport {
 	transfer(url: Url, options: {}): Promise<IHttpMessage>;
 }
+
 
 export interface IHttpMessage {
 	data: string;
 	statusCode: number;
 	headers: {}
 }
+
 
 export class HttpTransport implements IHttpTransport {
 
