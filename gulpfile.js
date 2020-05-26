@@ -40,6 +40,11 @@ function release() {
 }
 
 
+function copy_def() {
+	return src('Source/csscrape.d.ts').pipe(dest('./bin'));
+}
+
+
 function add_env_to_main() {
 	return src('bin/csscrape.js')
 		.pipe(insert.prepend('#! /usr/bin/env node \n'))
@@ -58,4 +63,4 @@ function test(cb) {
 exports.dev = dev;
 exports.test = series(dev, test);
 exports.watch = () => watch([soureFiles, testFiles], series(dev, test));
-exports.default = series(release, add_env_to_main);
+exports.default = series(release, copy_def, add_env_to_main);
