@@ -86,7 +86,7 @@ Results (as of 5/25/2020):
 
 ### Follow links to scrape related data
 ###### Example - [Try it out in your browser](https://tonicdev.com/npm/csscrape)
-Same as above, but follow each package's link to grab number of dependecies from its details page:
+Same as above, but follow each package's link to grab number of dependencies from its details page:
 
 ```js
 const { scrape } = require('csscrape');
