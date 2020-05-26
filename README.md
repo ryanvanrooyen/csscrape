@@ -176,16 +176,15 @@ done();
 **csscrape** also provides a CLI
 
 ```sh
-Usage: csscrape <url>
+Usage: csscrape [options] <url>
 
-  Options:
-
-    -h, --help                   output usage information
-    -V, --version                output the version number
-    -f, --filter <selector>      Filter to specific data in the results
-    -s, --select <selector>      Data selector (string or json string)
-    -l, --followlink <selector>  Select a link from the data to follow
-    -v, --verbose                Set logging to verbose
+Options:
+  -V, --version                output the version number
+  -f, --filter <selector>      Filter to specific data in the results
+  -s, --select <selector>      Data selector (string or json string)
+  -l, --followlink <selector>  Select a link from the data to follow
+  -v, --verbose                Set logging to verbose
+  -h, --help                   display help for command
 ```
 
 ### Install
